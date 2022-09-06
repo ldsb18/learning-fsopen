@@ -1,0 +1,13 @@
+user->browser: Add a note and click on save button
+browser->server: POST a new note 
+
+note over server
+    update "notes" document
+end note over 
+
+server-->browser: send updated "notes" document
+
+note over browser
+    refresh page displaying 
+    updated "notes" document
+end note over 

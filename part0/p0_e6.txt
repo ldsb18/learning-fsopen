@@ -1,0 +1,14 @@
+user->browser: Add a note and click on save button
+
+note over browser
+    update spa document
+    and update DOM to
+    display the new note
+end note over 
+
+browser->server: POST new note
+
+note over server
+    push new note on 
+    spa document
+end note over 

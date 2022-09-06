@@ -1,1 +1,3 @@
-# learning-work
+# learning FullStackOpen
+#
+# Webpage: https://fullstackopen.com/

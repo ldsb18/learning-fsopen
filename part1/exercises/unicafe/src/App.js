@@ -14,14 +14,9 @@ const All = ({ feedback }) => {
 }
 
 const Average = ({ feedback }) => {
-
 	
 	const total = feedback.good + feedback.neutral + feedback.bad
 	const average = (feedback.good - feedback.bad) / total
-
-	if(total === 0) {
-		return <p>There are not feedbacks yet to show an average score</p>
-	}
 
 	return(
 			<p>Average score: { average }</p>
@@ -33,10 +28,6 @@ const Positive = ({ feedback }) => {
 	const total = feedback.good + feedback.neutral + feedback.bad
 	const percentaje = feedback.good / total;
 
-	if(total === 0) {
-		return <p>There are not feedbacks yet to show an average of positives reviews</p>
-	}
-
 	return(
 			<p>Percentaje of positive feedback: {percentaje * 100}%</p>
 	)
@@ -44,10 +35,16 @@ const Positive = ({ feedback }) => {
 
 const Statistics = ({ feedback }) => {
 
+	if( (feedback.good + feedback.neutral + feedback.bad) === 0) {
+		return(
+			<div>
+				<p>No feedback given</p>
+			</div>
+		)
+	}
+
 	return(
 		<div>
-			<h1>Statistics</h1>
-
 			<p>Good: {feedback.good} </p>
 			<p>Neutral: {feedback.neutral} </p>
 			<p>Bad: {feedback.bad} </p>
@@ -87,6 +84,7 @@ const App = () => {
 			<Button onClick={ handleNeutral } name="Neutral" />
 			<Button onClick={ handleBad } name="Bad" />
 
+			<h1>Statistics</h1>
 			<Statistics feedback={ feedback } />
 
 		</div>    

@@ -47,13 +47,17 @@ const Statistics = ({ feedback }) => {
 
 	return(
 		<div>
-			<StatisticsLine text="Good" value={feedback.good}/>
-			<StatisticsLine text="Neutral" value={feedback.neutral}/>
-			<StatisticsLine text="Bad" value={feedback.bad}/>
+			<table>
+				<tbody>
+					<StatisticsLine text="Good" value={feedback.good}/>
+					<StatisticsLine text="Neutral" value={feedback.neutral}/>
+					<StatisticsLine text="Bad" value={feedback.bad}/>
 
-			<All feedback={ feedback } />
-			<Average feedback={ feedback } />
-			<Positive feedback={ feedback } />
+					<All feedback={ feedback } />
+					<Average feedback={ feedback } />
+					<Positive feedback={ feedback } />
+				</tbody>
+			</table>
 		</div>
 	)
 }
@@ -61,14 +65,10 @@ const Statistics = ({ feedback }) => {
 const StatisticsLine = ({ text, value}) => {
 
 	return(
-		<table>
-			<tbody>
-				<tr>
-					<td>{ text }</td>
-					<td>{ value }</td>
-				</tr>
-			</tbody>
-		</table>
+		<tr>
+			<td>{ text }</td>
+			<td>{ value }</td>
+		</tr>
 	)
 }
 

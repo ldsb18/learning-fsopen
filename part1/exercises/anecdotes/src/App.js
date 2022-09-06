@@ -34,11 +34,42 @@ const Anecdote = ({ anecdotes }) => {
 
 	return(
 		<div>
+			<h1>Anecdote of the day</h1>
+
 			<p>{ anecdotes[selected] }</p>
 			<p>Has { votes[selected] } votes</p>
 
 			<Button onClick={handleVote} text="Vote" />
 			<Button onClick={randomAnecdote} text="Next anecdote" />
+
+			<h1>Most voted anecdote</h1>
+
+			<MostVoted anecdotes={anecdotes} votes={votes} />
+		</div>
+	)
+}
+
+const MostVoted = ({ anecdotes, votes }) => {
+
+	const pickMostVoted = (votes) => {
+		let mostVoted = {
+			index: 0,
+			value: 0
+		};
+
+		votes.forEach((element, index) => {
+			if(element > mostVoted.value){
+				mostVoted.value = element;
+				mostVoted.index = index;
+			}
+		});
+
+		return mostVoted.index
+	}
+
+	return(
+		<div>
+			<p> { anecdotes[pickMostVoted(votes)] } </p>
 		</div>
 	)
 }

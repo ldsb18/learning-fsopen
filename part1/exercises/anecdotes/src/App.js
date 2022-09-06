@@ -37,8 +37,8 @@ const Anecdote = ({ anecdotes }) => {
 			<p>{ anecdotes[selected] }</p>
 			<p>Has { votes[selected] } votes</p>
 
-			<Button onClick={randomAnecdote} text="Random" />
 			<Button onClick={handleVote} text="Vote" />
+			<Button onClick={randomAnecdote} text="Next anecdote" />
 		</div>
 	)
 }

@@ -42,6 +42,23 @@ const Positive = ({ feedback }) => {
 	)
 }
 
+const Statistics = ({ feedback }) => {
+
+	return(
+		<div>
+			<h1>Statistics</h1>
+
+			<p>Good: {feedback.good} </p>
+			<p>Neutral: {feedback.neutral} </p>
+			<p>Bad: {feedback.bad} </p>
+
+			<All feedback={ feedback } />
+			<Average feedback={ feedback } />
+			<Positive feedback={ feedback } />
+		</div>
+	)
+}
+
 const App = () => {
 
 	const [ feedback, setFeedback ] = useState({
@@ -66,19 +83,11 @@ const App = () => {
 		<div>
 			<h1>Give feedback</h1>
 		 
-			<Button onClick={handleGood} name="Good" />
-			<Button onClick={handleNeutral} name="Neutral" />
-			<Button onClick={handleBad} name="Bad" />
+			<Button onClick={ handleGood } name="Good" />
+			<Button onClick={ handleNeutral } name="Neutral" />
+			<Button onClick={ handleBad } name="Bad" />
 
-			<h1>Statistics</h1>
-
-			<p>Good: {feedback.good} </p>
-			<p>Neutral: {feedback.neutral} </p>
-			<p>Bad: {feedback.bad} </p>
-
-			<All feedback={ feedback } />
-			<Average feedback={ feedback } />
-			<Positive feedback={ feedback } />
+			<Statistics feedback={ feedback } />
 
 		</div>    
 	)

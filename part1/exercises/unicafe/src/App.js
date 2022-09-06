@@ -6,23 +6,60 @@ const Button = ({ onClick, name }) => {
 	)
 }
 
+const All = ({ feedback }) => {
+
+	return(
+		<p>Total of feedbacks: { feedback.good + feedback.neutral + feedback.bad }</p>
+	)
+}
+
+const Average = ({ feedback }) => {
+
+	
+	const total = feedback.good + feedback.neutral + feedback.bad
+	const average = (feedback.good - feedback.bad) / total
+
+	if(total === 0) {
+		return <p>There are not feedbacks yet to show an average score</p>
+	}
+
+	return(
+			<p>Average score: { average }</p>
+	)
+}
+
+const Positive = ({ feedback }) => {
+
+	const total = feedback.good + feedback.neutral + feedback.bad
+	const percentaje = feedback.good / total;
+
+	if(total === 0) {
+		return <p>There are not feedbacks yet to show an average of positives reviews</p>
+	}
+
+	return(
+			<p>Percentaje of positive feedback: {percentaje * 100}%</p>
+	)
+}
 
 const App = () => {
-	
-	const [ good , setGood ] = useState(0)
-	const [ neutral , setNeutral ] = useState(0)
-	const [ bad , setBad ] = useState(0)
+
+	const [ feedback, setFeedback ] = useState({
+		good: 0,
+		neutral: 0,
+		bad: 0
+	})
 
 	const handleGood = () => {
-		setGood(good + 1)
+		setFeedback({ ...feedback, good: feedback.good + 1 })
 	}
 
 	const handleNeutral= () => {
-		setNeutral(neutral + 1)
+		setFeedback({ ...feedback, neutral: feedback.neutral + 1 })
 	}
 
 	const handleBad= () => {
-		setBad(bad + 1)
+		setFeedback({ ...feedback, bad: feedback.bad + 1 })
 	}
 
 	return (
@@ -35,9 +72,13 @@ const App = () => {
 
 			<h1>Statistics</h1>
 
-			<p>Good: {good} </p>
-			<p>Neutral: {neutral} </p>
-			<p>Bad: {bad} </p>
+			<p>Good: {feedback.good} </p>
+			<p>Neutral: {feedback.neutral} </p>
+			<p>Bad: {feedback.bad} </p>
+
+			<All feedback={ feedback } />
+			<Average feedback={ feedback } />
+			<Positive feedback={ feedback } />
 
 		</div>    
 	)

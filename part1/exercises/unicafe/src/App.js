@@ -45,13 +45,22 @@ const Statistics = ({ feedback }) => {
 
 	return(
 		<div>
-			<p>Good: {feedback.good} </p>
-			<p>Neutral: {feedback.neutral} </p>
-			<p>Bad: {feedback.bad} </p>
+			<StatisticsLine text="Good" value={feedback.good}/>
+			<StatisticsLine text="Neutral" value={feedback.neutral}/>
+			<StatisticsLine text="Bad" value={feedback.bad}/>
 
 			<All feedback={ feedback } />
 			<Average feedback={ feedback } />
 			<Positive feedback={ feedback } />
+		</div>
+	)
+}
+
+const StatisticsLine = ({ text, value}) => {
+
+	return(
+		<div>
+			<p>{ text }: { value }</p>
 		</div>
 	)
 }

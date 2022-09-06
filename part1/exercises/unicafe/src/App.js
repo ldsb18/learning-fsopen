@@ -8,8 +8,10 @@ const Button = ({ onClick, name }) => {
 
 const All = ({ feedback }) => {
 
+	const total =  feedback.good + feedback.neutral + feedback.bad
+
 	return(
-		<p>Total of feedbacks: { feedback.good + feedback.neutral + feedback.bad }</p>
+		<StatisticsLine text="All" value={ total } />
 	)
 }
 
@@ -19,7 +21,7 @@ const Average = ({ feedback }) => {
 	const average = (feedback.good - feedback.bad) / total
 
 	return(
-			<p>Average score: { average }</p>
+		<StatisticsLine text="Average" value={ average } />
 	)
 }
 
@@ -29,7 +31,7 @@ const Positive = ({ feedback }) => {
 	const percentaje = feedback.good / total;
 
 	return(
-			<p>Percentaje of positive feedback: {percentaje * 100}%</p>
+		<StatisticsLine text="Positive" value={ percentaje }  />
 	)
 }
 
@@ -59,9 +61,14 @@ const Statistics = ({ feedback }) => {
 const StatisticsLine = ({ text, value}) => {
 
 	return(
-		<div>
-			<p>{ text }: { value }</p>
-		</div>
+		<table>
+			<tbody>
+				<tr>
+					<td>{ text }</td>
+					<td>{ value }</td>
+				</tr>
+			</tbody>
+		</table>
 	)
 }
 

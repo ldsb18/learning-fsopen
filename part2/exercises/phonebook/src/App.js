@@ -16,12 +16,31 @@ const App = () => {
 
 	const addNote = (event) => {
 		event.preventDefault();
+		let flag = true;
 		
 		const nameObject = {
 			name: newName,
 		};
 
-		setPersons(persons.concat(nameObject));
+		/*First solution
+		persons.map( (person) =>{
+			if (person.name === newName) {
+				window.alert(`${newName} is already added to phonebook`);
+				flag = !flag;
+			} 
+		})
+
+		if(flag){
+			setPersons(persons.concat(nameObject));
+		}*/
+
+		//Second solution, this does not iterate the entire array for each added person
+		if(JSON.stringify(persons).includes( JSON.stringify(nameObject) ) ){
+			window.alert(`${newName} is already added to phonebook`);
+		}else{
+			setPersons(persons.concat(nameObject));
+		}
+
 		setNewName('')
 	}
 

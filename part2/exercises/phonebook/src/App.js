@@ -2,50 +2,47 @@ import { useState } from 'react';
 
 const Contact = ({ contact }) => {
 		return(
-			<p>{ contact.name }</p>
+			<tr>
+				<td>{ contact.name }</td>
+				<td>{ contact.number }</td>
+			</tr>
 		)
 }
 
 const App = () => {
 	
-	const [persons, setPersons] = useState([
-		{ name: 'Arto Hellas' }
-	]);
+	const [persons, setPersons] = useState([{ 
+			name: 'Arto Hellas',
+			number: '040-1234567'
+	}]);
 
 	const [newName, setNewName] = useState('');
+	const [newNumber, setNewNumber] = useState('');
 
-	const addNote = (event) => {
+	const addContact = (event) => {
 		event.preventDefault();
-		let flag = true;
 		
 		const nameObject = {
 			name: newName,
+			number: newNumber
 		};
 
-		/*First solution
-		persons.map( (person) =>{
-			if (person.name === newName) {
-				window.alert(`${newName} is already added to phonebook`);
-				flag = !flag;
-			} 
-		})
-
-		if(flag){
-			setPersons(persons.concat(nameObject));
-		}*/
-
-		//Second solution, this does not iterate the entire array for each added person
-		if(JSON.stringify(persons).includes( JSON.stringify(nameObject) ) ){
+		if(JSON.stringify(persons).includes(`"name":"${newName}"`) ){
 			window.alert(`${newName} is already added to phonebook`);
 		}else{
 			setPersons(persons.concat(nameObject));
 		}
 
-		setNewName('')
+		setNewName('');
+		setNewNumber('');
 	}
 
-	const handleChange = (event) => {
+	const handleNameChange = (event) => {
 		setNewName(event.target.value);
+	}
+
+	const handleNumberChange = (event) => {
+		setNewNumber(event.target.value);
 	}
 
 	return (
@@ -53,12 +50,21 @@ const App = () => {
 
 			<h2>Phonebook</h2>
 
-			<form onSubmit={addNote}>
+			<form onSubmit={addContact}>
 
 				<div>
 					name: <input 
 						value={ newName }
-						onChange={handleChange}
+						onChange={handleNameChange}
+					/>
+				</div>
+
+				<br />
+
+				<div>
+					number: <input 
+						value={ newNumber }
+						onChange={handleNumberChange}
 					/>
 				</div>
 
@@ -70,9 +76,13 @@ const App = () => {
 
 			<h2>Numbers</h2>
 
-			{persons.map( (person) => 
-				<Contact key={person.name} contact={person} />
-			)}
+			<table>
+				<tbody>
+					{persons.map( (person) => 
+						<Contact key={person.name} contact={person} />
+					)}
+				</tbody>
+			</table>		
 
 		</div>
 	)

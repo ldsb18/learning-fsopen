@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App';
 
+/*
 const notes = [
   {
     id: 1,
@@ -22,6 +23,6 @@ const notes = [
     date: '2019-05-30T19:20:14.298Z',
     important: true
   }
-];
+];*/
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App notes={notes} />);
+ReactDOM.createRoot(document.getElementById('root')).render(<App />)

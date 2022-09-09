@@ -1,4 +1,3 @@
-
 const Countries = ({ data, show }) => {
 
 	return(
@@ -32,7 +31,7 @@ const Country = ({ data }) => {
 			<h1>{ countryObject.name }</h1>
 
 			<h3>Capital: { countryObject.capital }</h3>
-			<p>Area: { countryObject.area }</p>
+			<p>Area: { countryObject.area } m2</p>
 
 			<h2>Languages:</h2>
 			<ul>
@@ -48,7 +47,20 @@ const Country = ({ data }) => {
 	)
 }
 
-const Displayer = ({ data, show }) => {
+const Weather = ({ data }) => {
+
+	return(
+		<div>
+			<h2>{`Weather in ${data.name}`}</h2>
+
+			<img src={ data.imgurl } />
+			<p>Temperature: { data.temperature } ºC</p>
+			<p>Wind: { data.wind } m/s</p>
+		</div>
+	)
+}
+
+const Displayer = ({ data, show, weather }) => {
 
 	if(data.length > 10){
 		return(
@@ -67,8 +79,12 @@ const Displayer = ({ data, show }) => {
 			<Countries data={data} show={show} />
 		)
 	} else if (data.length === 1) {
+		
 		return(
-			<Country data={data[0]}/>
+			<div>
+				<Country data={data[0]} />
+				<Weather data={weather}  />
+			</div>
 		)
 	}
 }

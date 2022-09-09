@@ -1,11 +1,14 @@
 
-const Countries = ({ data }) => {
+const Countries = ({ data, show }) => {
 
 	return(
 		<div>
 			{data.map( (country) => {
 				return(
-					<p key={country.cca3} >{ country.name.common }</p>
+					<div key={country.cca3}>	
+						<p >{ country.name.common }</p>
+						<button onClick={(evt) => {show(country.name.common, evt)}} >Show</button>
+					</div>
 				)
 			})}
 		</div>
@@ -45,7 +48,7 @@ const Country = ({ data }) => {
 	)
 }
 
-const Displayer = ({ data }) => {
+const Displayer = ({ data, show }) => {
 
 	if(data.length > 10){
 		return(
@@ -61,7 +64,7 @@ const Displayer = ({ data }) => {
 		)
 	} else if(data.length > 1 && data.length <= 10) {
 		return(
-			<Countries data={data} />
+			<Countries data={data} show={show} />
 		)
 	} else if (data.length === 1) {
 		return(

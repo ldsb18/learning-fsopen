@@ -5,7 +5,6 @@ import SearchBar from "./components/SearchBar";
 import Displayer from "./components/Displayer";
 
 
-
 const App = () => {
 
 	const [ filter, setfilter ] = useState('')
@@ -20,6 +19,12 @@ const App = () => {
 		e.preventDefault();
 
 		setSearch(filter);
+	}
+
+	const showCountry = (country, evt) => {
+
+		setfilter(country)
+		setSearch(country)
 	}
 
 	const dataFetch = () => {
@@ -46,7 +51,7 @@ const App = () => {
 				submit={submitHandler}
 			/>
 
-			<Displayer data={data} />
+			<Displayer data={data} show={showCountry} />
 		</div>
 	);
 }

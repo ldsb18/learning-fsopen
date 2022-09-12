@@ -43,16 +43,29 @@ const App = () => {
 		setNewNumber('');
 	}
 
-	const handleNameChange = (event) => {
-		setNewName(event.target.value);
+	const eraseContact = (id) => {
+		const person = persons.find(p => p.id === id ).name;
+
+		if(window.confirm(`Delete ${person}`)){
+			contactService
+			.deleteContact(id)
+			.then(() => setPersons(persons.filter(p => p.id !== id)))
+		}
 	}
 
-	const handleNumberChange = (event) => {
-		setNewNumber(event.target.value);
-	}
+	//change handlers
+	const handlers = {
+		handleNameChange: (event) => {
+			setNewName(event.target.value);
+		},
 
-	const handleFilterChange = (event) => {
-		setFilter(event.target.value);
+		handleNumberChange: (event) => {
+			setNewNumber(event.target.value);
+		},
+
+		handleFilterChange: (event) => {
+			setFilter(event.target.value);
+		},
 	}
 
 	const filteredContacts = ({ persons, filter }) => {
@@ -67,7 +80,7 @@ const App = () => {
 			<h1>Phonebook</h1>
 
 			<Filter 
-				handleFliter={handleFilterChange}
+				handleFliter={handlers.handleFilterChange}
 				filter={filter}
 			/>
 
@@ -75,8 +88,8 @@ const App = () => {
 
 			<Form 
 				addContact={addContact}
-				handleNameChange={handleNameChange}
-				handleNumberChange={handleNumberChange}
+				handleNameChange={handlers.handleNameChange}
+				handleNumberChange={handlers.handleNumberChange}
 				newName={newName}
 				newNumber={newNumber}
 			/>
@@ -84,7 +97,8 @@ const App = () => {
 			<h2>Numbers</h2>
 
 			<DisplayContacts 
-				contacts={ filteredContacts({ persons, filter })} 
+				contacts={ filteredContacts({ persons, filter })}
+				eraseContact={eraseContact} 
 			/>
 
 		</div>

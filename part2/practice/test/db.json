@@ -44,9 +44,15 @@
     },
     {
       "content": "Nota loca",
-      "important": true,
+      "important": false,
       "date": "2022-09-12T15:03:28.199Z",
       "id": 8
+    },
+    {
+      "content": "Asero",
+      "important": false,
+      "date": "2022-09-12T15:07:21.609Z",
+      "id": 9
     }
   ]
 }

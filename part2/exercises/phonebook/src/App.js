@@ -1,27 +1,25 @@
 import { useState, useEffect } from 'react';
 
-import axios from 'axios';
-
 import Form from "./components/Form";
 import DisplayContacts from './components/DisplayContacts';
 import Filter from './components/Filter'
 
+import contactService from './services/contacts'
+
 const App = () => {
+
 	const [ persons, setPersons ] = useState([]);
 	const [ newName, setNewName ] = useState('');
 	const [ newNumber, setNewNumber]  = useState('');
 	const [ filter, setFilter ] = useState('');
 
-	const fetchHook = () => {
-		axios
-			.get('http://localhost:3001/persons')
-			.then(response => {
-				console.log('promise fulfilled');
-				setPersons(response.data);
+	useEffect(() => {
+		contactService
+			.getAll()
+			.then(initalContacts => {
+				setPersons(initalContacts);
 			})
-	}
-
-	useEffect(fetchHook, []);
+	}, []);
 
 	const addContact = (event) => {
 		event.preventDefault();
@@ -29,13 +27,16 @@ const App = () => {
 		const nameObject = {
 			name: newName,
 			number: newNumber,
-			id: persons[persons.length-1].id + 1,
 		};
 
 		if(JSON.stringify(persons).includes(`"name":"${newName}"`) ){
 			window.alert(`${newName} is already added to phonebook`);
 		}else{
-			setPersons(persons.concat(nameObject));
+			contactService
+				.create(nameObject)
+				.then(createdContact => {
+					setPersons(persons.concat(createdContact));
+				})
 		}
 
 		setNewName('');

@@ -30,7 +30,16 @@ const App = () => {
 		};
 
 		if(JSON.stringify(persons).includes(`"name":"${newName}"`) ){
-			window.alert(`${newName} is already added to phonebook`);
+
+			const id = persons.find(p => p.name === newName).id
+
+			if(window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)){
+				contactService
+					.update(id, nameObject)
+					.then( updatedContact => {
+						setPersons(persons.map(p => p.id !== id ? p : updatedContact))
+					})
+			};
 		}else{
 			contactService
 				.create(nameObject)

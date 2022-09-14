@@ -1,0 +1,1 @@
+DELETE https://fsopen-notes-app.fly.dev/api/notes/2

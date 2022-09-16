@@ -20,19 +20,9 @@ const Note = mongoose.model('Note', noteSchema);
 mongoose
 	.connect(url)
 	.then( (result) => {
-		console.log('connected');
 
-		Note.find({}).then( resp => {
-			resp.forEach(note => {
-				console.log(note);
-			})
-			mongoose.connection.close();
-		})
-	})
-
-
-	   /* const note = new Note({
-			content: 'Callback-functions suck',
+	   	const note = new Note({
+			content: 'HTML is easy',
 			date: new Date(),
 			important: true,
 		});
@@ -44,4 +34,4 @@ mongoose
 
 		return mongoose.connection.close();
 	})
-	.catch( (error) => console.log(error))*/
+	.catch( (error) => console.log(error))

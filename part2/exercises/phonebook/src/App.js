@@ -35,30 +35,63 @@ const App = () => {
 			number: newNumber,
 		};
 		
-		contactService
-			.create(nameObject)
-			.then(createdContact => setPersons(persons.concat(createdContact)) )
-			.then( () => {
-				setNotificationMessage(
-					`${newName} has been added to phonebook`
-				)
-				setNotificationType('success')
-				setTimeout(() => {
-					setNotificationMessage(null)
-					setNotificationType(null)
-				}, notificationGlobalTime);
-			})
-			.catch( error => {
-				console.log(error);
-				setNotificationMessage(
-					`An error ocurred trying to add ${newName}'s information`
-				)
-				setNotificationType('error')
-				setTimeout(() => {
-					setNotificationMessage(null)
-					setNotificationType(null)
-				}, notificationGlobalTime);
-			})
+
+		if(JSON.stringify(persons).includes(`"name":"${newName}"`) ){
+
+			const id = persons.find(p => p.name === newName).id
+
+			if(window.confirm(`${newName} is already added to phonebook, replace old number with new one?`)){
+				contactService
+					.update(id, nameObject)
+					.then( updatedContact => setPersons(persons.map(p => p.id !== id ? p : updatedContact)))
+					.then( () => {
+						setNotificationMessage(
+							`${newName} has been updated`
+						)
+						setNotificationType('success')
+						setTimeout(() => {
+							setNotificationMessage(null)
+							setNotificationType(null)
+						}, notificationGlobalTime);
+					})
+					.catch( error => {
+						console.log(error);
+						setNotificationMessage(
+							`An error ocurred trying to update ${newName}'s information`
+						)
+						setNotificationType('error')
+						setTimeout(() => {
+							setNotificationMessage(null)
+							setNotificationType(null)
+						}, notificationGlobalTime);
+					})
+			};
+		}else{
+			contactService
+				.create(nameObject)
+				.then(createdContact => setPersons(persons.concat(createdContact)) )
+				.then( () => {
+					setNotificationMessage(
+						`${newName} has been added to phonebook`
+					)
+					setNotificationType('success')
+					setTimeout(() => {
+						setNotificationMessage(null)
+						setNotificationType(null)
+					}, notificationGlobalTime);
+				})
+				.catch( error => {
+					console.log(error);
+					setNotificationMessage(
+						`An error ocurred trying to add ${newName}'s information`
+					)
+					setNotificationType('error')
+					setTimeout(() => {
+						setNotificationMessage(null)
+						setNotificationType(null)
+					}, notificationGlobalTime);
+				})
+		}
 
 		setNewName('');
 		setNewNumber('');

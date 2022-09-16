@@ -5,3 +5,13 @@ Content-Type: application/json
     "content": "LMAOOO suckerrrr",
     "important": true
 }
+
+###
+//Invalid POST request. content < 5 char,
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "LMAO",
+    "important": true
+}

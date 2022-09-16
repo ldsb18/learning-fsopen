@@ -57,7 +57,7 @@ const App = () => {
 					.catch( error => {
 						console.log(error);
 						setNotificationMessage(
-							`An error ocurred trying to update ${newName}'s information`
+							error.response.data.error
 						)
 						setNotificationType('error')
 						setTimeout(() => {
@@ -83,7 +83,7 @@ const App = () => {
 				.catch( error => {
 					console.log(error);
 					setNotificationMessage(
-						`An error ocurred trying to add ${newName}'s information`
+						error.response.data.error
 					)
 					setNotificationType('error')
 					setTimeout(() => {

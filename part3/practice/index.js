@@ -50,9 +50,18 @@ const unknownEndpoint = (request, response) => {
 	})
 }
 
-app.use(express.json())
-app.use(express.static('build'))
+const errorHandler = (error, request, response, next) => {
+	console.log(error.nessage);
 
+	if (error.name = 'CastError') {
+		return response.status(400).send({ error: 'malformatted id'});
+	}
+
+	next(error);
+}
+
+app.use(express.static('build'))
+app.use(express.json())
 app.use(requestLogger)
 
 app.use(cors())
@@ -63,19 +72,26 @@ app.get('/api/notes', (request, response) => {
 	})
 });
 
-app.get('/api/notes/:id', (request, response) => {
+app.get('/api/notes/:id', (request, response, next) => {
 
-	Note.findById(request.params.id).then( note => {
+	Note.findById(request.params.id)
+		.then( note => {
+			if (note) {
 				response.json(note);
-	})
-	
+			} else {
+				response.status(404).end();
+			}
+		})
+		.catch( err => next(err))	
 })
 
 app.delete('/api/notes/:id', (request, response) => {
-	const id = Number(request.params.id);
-	notes = notes.filter(n => n.id !== id);
-
-	response.status(204).end()
+	
+	Note.findByIdAndRemove(request.params.id)
+		.then( result => {
+			response.status(204).end();
+		})
+		.catch( err => next(err))	
 })
 
 app.post('/api/notes', (request, response) => {
@@ -99,7 +115,23 @@ app.post('/api/notes', (request, response) => {
 	})
 })
 
+app.put('/api/notes/:id', (request, response, next) => {
+	const body = request.body;
+
+	const note = {
+		content: body.content,
+		important: body.important,
+	}
+
+	Note.findByIdAndUpdate(request.params.id, note, { new: true })
+		.then(updatedNote => {
+			response.json(updatedNote);
+		})
+		.catch( err => next(err))
+})
+
 app.use(unknownEndpoint)
+app.use(errorHandler)
 
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`);

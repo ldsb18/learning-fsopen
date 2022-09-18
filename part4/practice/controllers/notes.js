@@ -1,5 +1,5 @@
 const notesRouter = require('express').Router()
-const Notes = require('./models/note')
+const Notes = require('../models/note')
 
 notesRouter.get('/', (request, response) => {
     Notes.find({}).then( notes => {
@@ -7,7 +7,7 @@ notesRouter.get('/', (request, response) => {
     })
 })
 
-notesRouter.get('.:id', (request, response, next) => {
+notesRouter.get('/:id', (request, response, next) => {
     Notes.findById(request.params.id)
         .then( note => {
             if (note) {
@@ -34,7 +34,7 @@ notesRouter.post('/', (request, response, next) => {
     .catch( err => next(err) );
 })
 
-notesRouter.delete(':id', (request, response, next) => {
+notesRouter.delete('/:id', (request, response, next) => {
     Notes.findByIdAndRemove(request.params.id)
         .then( result => {
             response.status(204).end()
@@ -42,11 +42,10 @@ notesRouter.delete(':id', (request, response, next) => {
         .catch( err => next(err));
 })
 
-notesRouter.put(':id', (request, response, next) => {
+notesRouter.put('/:id', (request, response, next) => {
     const body = request.body;
 
     const note = {
-        content: body.content,
         important: body. important,
     };
     

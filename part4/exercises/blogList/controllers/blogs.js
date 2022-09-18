@@ -23,7 +23,7 @@ blogRouter.get('/:id', (request, response, next) => {
 
 blogRouter.post('/', (request, response, next) => {
 	
-	const body = request.body;
+	const body = request.body
 
 	const newBlog = new Blog({
 		title: body.title,
@@ -42,7 +42,7 @@ blogRouter.post('/', (request, response, next) => {
 blogRouter.delete('/:id', (request, response, next) => {
 	Blog.findByIdAndDelete(request.params.id)
 		.then( result => {
-			response.status(204).end();
+			response.status(204).end()
 		})
 		.catch( err => next(err))
 })

@@ -36,14 +36,14 @@ const favoriteBlog = (blogs) => {
 
 const mostBlogs = (blogs) => {
 
-	const blogsByAuthor = _.countBy( _.map(blogs, _.property('author')) )
+	const blogsPerAuthor = _.countBy( _.map(blogs, _.property('author')) )
 
 	const mostBlogs = {
 		author: '',
 		blogs: 0
 	}
 
-	_.forEach(blogsByAuthor, (value, key) => {
+	_.forEach(blogsPerAuthor, (value, key) => {
 		if (mostBlogs.blogs < value) {
 			mostBlogs.author = key,
 			mostBlogs.blogs = value
@@ -55,9 +55,45 @@ const mostBlogs = (blogs) => {
 		: mostBlogs
 }
 
+const mostLikes = (blogs) => {
+
+	const topLikes = {
+		author: '',
+		likes: 0
+	}
+
+	const authors = _.map(blogs, 'author')
+	const likes = _.map(blogs, 'likes')
+
+	const mergedAuthorsObject = authors.map( (item, index) => {
+		return {
+			author: item,
+			likes: likes[index]
+		}
+	})
+
+	const transformedMergedObject = _.mapValues( _.groupBy(mergedAuthorsObject, 'author'), (array) => {
+		return array.reduce( (sum, item) => {
+			return item.likes + sum
+		}, 0)
+	})
+
+	_.forEach(transformedMergedObject, (value, key) => {
+		if(topLikes.likes < value){
+			topLikes.author = key
+			topLikes.likes = value
+		}
+	})
+
+	return blogs.length === 0
+		? 0
+		: topLikes
+}
+
 module.exports = {
 	dummy,
 	totalLikes,
 	favoriteBlog,
-	mostBlogs
+	mostBlogs,
+	mostLikes
 }

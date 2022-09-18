@@ -1,0 +1,54 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "The first Blog ever in this database",
+    "author": "William McMahon",
+    "url": "http://www.williamblog.com/",
+    "likes": 25 
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "How to Skate  without socks",
+    "author": "Paulo Maninho",
+    "url": "http://www.skating-feets.org/",
+    "likes": 127
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Stoic-programming",
+    "author": "Zenon",
+    "url": "https://en.wikipedia.org/wiki/Stoicism",
+    "likes": 5642
+}
+
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "寂しいの犬",
+    "author": "田中丹次郎",
+    "url": "http://www.nhk-corporation.or.jp/",
+    "likes": 1559
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "寂しいの犬",
+    "likes": 1559
+}
+
+###

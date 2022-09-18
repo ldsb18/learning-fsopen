@@ -1,11 +1,18 @@
 {
+  "name": "blogs-app",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "devDependencies": {
-    "dotenv": "^16.0.2"
+    "nodemon": "^2.0.20"    
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.1",
     "mongoose": "^6.6.1",
-    "nodemon": "^2.0.20"
+    "dotenv": "^16.0.2"
   }
 }

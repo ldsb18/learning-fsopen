@@ -14,12 +14,12 @@ const mongoose = require('mongoose')
 logger.info('connecting to', config.MONGO_URI)
 
 mongoose.connect(config.MONGODB_URI)
-    .then( () => {
-        logger.info('Connected to MongoDB');
-    })
-    .catch( err => {
-        logger.error('Failed to connect to MongoDB: ', err.message);
-    })
+	.then( () => {
+		logger.info('Connected to MongoDB')
+	})
+	.catch( err => {
+		logger.error('Failed to connect to MongoDB: ', err.message)
+	})
 
 app.use(cors())
 app.use(express.static('build'))

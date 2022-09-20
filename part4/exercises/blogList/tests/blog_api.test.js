@@ -100,6 +100,28 @@ describe('blogsAPI', () => {
 
 		expect(savedBlog.body.likes).toBe(0)
 	})
+	
+	test('An invalid blog cannot be added', async () => {
+
+		const newBlog = {
+			author: 'Vaskyat',
+			likes: 10000000
+		}
+
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(400)
+			.expect('Content-Type', /application\/json/)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+		const authors = blogsAtEnd.map( blog => blog.author)
+		expect(authors).not.toContain(
+			'Vaskyat'
+		)
+	})
 
 })
 

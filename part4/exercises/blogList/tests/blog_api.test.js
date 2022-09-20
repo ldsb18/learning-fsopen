@@ -54,6 +54,53 @@ describe('blogsAPI', () => {
 			expect(blog._id).not.toBeDefined()//This checks if '_id' property does not exist forEach blog
 		})
 	})
+
+	test('A valid blog can be added', async () => {
+
+		const newBlog = {
+			title: 'test blog to be added',
+			author: 'Vaskyat',
+			url: 'http://localhost:3001/api/blogs',
+			likes: 10000000
+		}
+
+		await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+		const titles = blogsAtEnd.map( blog => blog.title)
+		expect(titles).toContain(
+			'test blog to be added'
+		)
+
+		const authors = blogsAtEnd.map( blog => blog.author)
+		expect(authors).toContain(
+			'Vaskyat'
+		)
+	})
+
+	test('A valid blog with "likes" property missing can be added', async () => {
+
+		const newBlog = {
+			title: 'test blog to be added',
+			author: 'Vaskyat',
+			url: 'http://localhost:3001/api/blogs'
+		}
+
+		const savedBlog = await api
+			.post('/api/blogs')
+			.send(newBlog)
+			.expect(201)
+			.expect('Content-Type', /application\/json/)
+
+		expect(savedBlog.body.likes).toBe(0)
+	})
+
 })
 
 afterAll( () => {

@@ -20,7 +20,7 @@ blogRouter.get('/:id', async (request, response, ) => {
 	}
 })
 
-blogRouter.post('/', (request, response, next) => {
+blogRouter.post('/', async (request, response, next) => {
 	
 	const body = request.body
 
@@ -28,14 +28,12 @@ blogRouter.post('/', (request, response, next) => {
 		title: body.title,
 		author: body.author,
 		url: body.url,
-		likes: body.likes
+		likes: body.likes || 0
 	})
+
+	const savedNote = await newBlog.save()
 	
-	newBlog.save()
-		.then( savedNote => {
-			response.status(201).json(savedNote)
-		})
-		.catch( err => next(err))
+	response.status(201).json(savedNote)
 })
 
 blogRouter.delete('/:id', (request, response, next) => {

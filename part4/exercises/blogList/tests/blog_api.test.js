@@ -30,7 +30,7 @@ describe('blogsAPI', () => {
 		expect(response.body).toHaveLength(helper.initialBlogs.length)
 	})
 
-	test('a specific blog can be viewed', async () => {
+	test('A specific blog can be viewed', async () => {
 		const blogsAtStart = await helper.blogsInDb()
 
 		const blogToView = blogsAtStart[0]
@@ -44,6 +44,15 @@ describe('blogsAPI', () => {
 
 		expect(resultBlog.body).toEqual(processedBlogToView)
 
+	})
+
+	test('Unique identifier property of the blog posts is named id', async () => {
+		const blogs = await helper.blogsInDb()
+
+		blogs.forEach( blog => {
+			expect(blog.id).toBeDefined()//This checks if 'id' property exist forEach blog
+			expect(blog._id).not.toBeDefined()//This checks if '_id' property does not exist forEach blog
+		})
 	})
 })
 

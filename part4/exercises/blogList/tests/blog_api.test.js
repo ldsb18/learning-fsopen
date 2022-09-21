@@ -10,18 +10,12 @@ const Blog = require('../models/Blog')
 
 beforeEach(async () => {
 	await Blog.deleteMany({})
-
-	const blogObjects = helper.initialBlogs
-		.map( blog  => new Blog(blog))
-
-	const promiseArray = blogObjects.map( blog => blog.save())
-	await Promise.all(promiseArray)
-
+	await Blog.insertMany(helper.initialBlogs)
 })
 
-describe('blogsAPI', () => {
+describe('When there is initially some blogs saved', () => {
 
-	test('There are 6 blogs, and them are returned as JSON', async () => {
+	test('There are 6 blogs, and them are returned as JSON, HTTP 200', async () => {
 		const response = await api
 			.get('/api/blogs')
 			.expect(200)
@@ -30,7 +24,20 @@ describe('blogsAPI', () => {
 		expect(response.body).toHaveLength(helper.initialBlogs.length)
 	})
 
-	test('A specific blog can be viewed', async () => {
+	test('Unique identifier property of the blog posts is named id', async () => {
+		const blogs = await helper.blogsInDb()
+
+		blogs.forEach( blog => {
+			expect(blog.id).toBeDefined()//This checks if 'id' property exist forEach blog
+			expect(blog._id).not.toBeDefined()//This checks if '_id' property does not exist forEach blog
+		})
+	})
+
+})
+
+describe('Viewing a specific blog', () => {
+
+	test('A specific blog can be viewed, HTTP 200', async () => {
 		const blogsAtStart = await helper.blogsInDb()
 
 		const blogToView = blogsAtStart[0]
@@ -46,16 +53,27 @@ describe('blogsAPI', () => {
 
 	})
 
-	test('Unique identifier property of the blog posts is named id', async () => {
-		const blogs = await helper.blogsInDb()
+	test('A specific blog with an invalid Id cannot be viewed, HTTP 400', async () => {
+		const invalidId = 'ab342958720cc1237cd'
 
-		blogs.forEach( blog => {
-			expect(blog.id).toBeDefined()//This checks if 'id' property exist forEach blog
-			expect(blog._id).not.toBeDefined()//This checks if '_id' property does not exist forEach blog
-		})
+		await api
+			.get(`/api/blogs/${invalidId}`)
+			.expect(400)
 	})
 
-	test('A valid blog can be added', async () => {
+	test('A specific blog with a nonexisting Id cannot be viewed, HTTP 404', async () => {
+		const validNonExistingId = await helper.nonExistingId()
+
+		await api
+			.get(`/api/blogs/${validNonExistingId}`)
+			.expect(404)
+	})
+
+})
+
+describe('Addition of a new blog', () => {
+
+	test('A valid blog can be added, HTTP 201', async () => {
 
 		const newBlog = {
 			title: 'test blog to be added',
@@ -84,7 +102,7 @@ describe('blogsAPI', () => {
 		)
 	})
 
-	test('A valid blog with "likes" property missing can be added', async () => {
+	test('A valid blog with "likes" property missing can be added, HTTP 201', async () => {
 
 		const newBlog = {
 			title: 'test blog to be added',
@@ -100,8 +118,8 @@ describe('blogsAPI', () => {
 
 		expect(savedBlog.body.likes).toBe(0)
 	})
-	
-	test('An invalid blog cannot be added', async () => {
+
+	test('An invalid blog cannot be added, HTTP 400', async () => {
 
 		const newBlog = {
 			author: 'Vaskyat',
@@ -122,6 +140,33 @@ describe('blogsAPI', () => {
 			'Vaskyat'
 		)
 	})
+})
+
+describe('Deletion of a blog', () => {
+
+	test('Succes with status 204 if id is valid', async () => {
+		const blogsAtStart = await helper.blogsInDb()
+
+		const blogToDelete = blogsAtStart[0]
+
+		await api
+			.delete(`/api/blogs/${blogToDelete.id}`)
+			.expect(204)
+
+		const blogsAtEnd = await helper.blogsInDb()
+		expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+		
+		const titles = blogsAtEnd.map(blog => blog.title)
+		expect(titles).not.toContain(blogToDelete.title)
+
+	}) 
+
+})
+
+describe('Updating a blog', () => {
+
+
+
 
 })
 

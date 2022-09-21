@@ -126,7 +126,7 @@ app.put('/api/notes/:id', (request, response, next) => {
 		request.params.id, 
 		{ content, important }, 
 		{ new: true, runValidators: true, context: 'query' })
-		.then(updatedNote => {
+		.then( updatedNote => {
 			response.json(updatedNote);
 		})
 		.catch( err => next(err))

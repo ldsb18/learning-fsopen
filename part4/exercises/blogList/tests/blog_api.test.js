@@ -144,7 +144,7 @@ describe('Addition of a new blog', () => {
 
 describe('Deletion of a blog', () => {
 
-	test('Succes with status 204 if id is valid', async () => {
+	test('Success with status 204 if id is valid', async () => {
 		const blogsAtStart = await helper.blogsInDb()
 
 		const blogToDelete = blogsAtStart[0]
@@ -156,7 +156,7 @@ describe('Deletion of a blog', () => {
 		const blogsAtEnd = await helper.blogsInDb()
 		expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
 		
-		const titles = blogsAtEnd.map(blog => blog.title)
+		const titles = blogsAtEnd.map(blog => blog.title)//There can be more than 1 blog with the same author
 		expect(titles).not.toContain(blogToDelete.title)
 
 	}) 
@@ -165,9 +165,52 @@ describe('Deletion of a blog', () => {
 
 describe('Updating a blog', () => {
 
+	test('A blog can be updated with valid data, HTTP 200', async () => {
+		const blogsAtStart = await helper.blogsInDb()
 
+		const blogToUpdate = blogsAtStart[0]
 
+		const dataToUpdate = {
+			title: 'Updated blog',
+			author: 'Vaskyat',
+			url: 'http://localhost:3001/',
+			likes: 420
+		}
 
+		const updatedBlog = await api
+			.put(`/api/blogs/${blogToUpdate.id}`)
+			.send(dataToUpdate)
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
+
+		const blogsAtEnd = await helper.blogsInDb()
+
+		expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
+		
+		const titles = blogsAtEnd.map( blog => blog.title )
+		expect(titles).toContain(
+			'Updated blog'
+		)
+
+		expect(titles).not.toContain(blogToUpdate.title)
+
+	})
+
+	test('A blog cannot be updated with invalid data, HTTP 400', async () => {
+
+		const blogsAtStart = await helper.blogsInDb()
+
+		const blogToUpdate = blogsAtStart[0]
+
+		const dataToUpdate = {
+			author: 'Canelo',
+		}
+
+		await api
+			.put(`/api/blogs/${blogToUpdate.id}`)
+			.send(dataToUpdate)
+			.expect(400)
+	})
 })
 
 afterAll( () => {

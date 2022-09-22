@@ -11,17 +11,17 @@ describe('Favorite blog', () => {
 	test('when list has only one blog, equals the likes of that', () => {
 
 		const blogsWithOneElement = [{
-			_id: "5a422a851b54a676234d17f7",
-			title: "React patterns",
-			author: "Michael Chan",
-			url: "https://reactpatterns.com/",
+			_id: '5a422a851b54a676234d17f7',
+			title: 'React patterns',
+			author: 'Michael Chan',
+			url: 'https://reactpatterns.com/',
 			likes: 7,
 			__v: 0
 		}]
 
 		expect(listHelper.favoriteBlog(blogsWithOneElement)).toEqual({
-			title: "React patterns",
-			author: "Michael Chan",
+			title: 'React patterns',
+			author: 'Michael Chan',
 			likes: 7
 		})
 	})
@@ -29,8 +29,8 @@ describe('Favorite blog', () => {
 	test('of a bigger list is calculated right', () => {
 
 		expect(listHelper.favoriteBlog(blogs)).toEqual({
-			title: "Canonical string reduction",
-			author: "Edsger W. Dijkstra",
+			title: 'Canonical string reduction',
+			author: 'Edsger W. Dijkstra',
 			likes: 12
 		})
 	})

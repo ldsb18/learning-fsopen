@@ -9,10 +9,10 @@ describe('Total likes', () => {
 
 	test('when list has only one blog, equals the likes of that', () => {
 		const blogsWithOneElement = [{
-			_id: "5a422a851b54a676234d17f7",
-			title: "React patterns",
-			author: "Michael Chan",
-			url: "https://reactpatterns.com/",
+			_id: '5a422a851b54a676234d17f7',
+			title: 'React patterns',
+			author: 'Michael Chan',
+			url: 'https://reactpatterns.com/',
 			likes: 7,
 			__v: 0
 		}]

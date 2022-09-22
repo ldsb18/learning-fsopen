@@ -1,0 +1,28 @@
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Nueva nota creada por Vaskyat",
+    "important": true,
+    "userId": "632c776c3c4f401fbe4e6e18"
+}
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Otra nota mas creada por Vaskyat",
+    "important": false,
+    "userId": "632c776c3c4f401fbe4e6e18"
+}
+
+###
+POST http://localhost:3001/api/notes
+Content-Type: application/json
+
+{
+    "content": "Nueva nota creada por Test2",
+    "important": true,
+    "userId": "632c77a33c4f401fbe4e6e1c"
+}

@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/notes
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlZhc2t5YXQiLCJpZCI6IjYzMmM3NzZjM2M0ZjQwMWZiZTRlNmUxOCIsImlhdCI6MTY2Mzg4ODMwMn0.HHMZCzpLRbif_qC08BYnUASs0G9GuQVZkrVt0Bfq7AU
 
 {
     "content": "Nueva nota creada por Vaskyat",
-    "important": true,
-    "userId": "632c776c3c4f401fbe4e6e18"
+    "important": true
 }
 
 ###

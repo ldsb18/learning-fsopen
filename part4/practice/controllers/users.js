@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const usersRouter = require('express').Router()
 
-usersRouter.get('/', async (request, response) => {
+usersRouter.get('/', async (request, response)  => {
 	const users = await User.find({}).populate('notes', {content: 1, date: 1})
 	response.json(users)
 })
@@ -12,7 +12,7 @@ usersRouter.post('/', async (request, response) => {
 	
 	const existingUser = await User.findOne({ username })
 	if (existingUser) {
-		response.status(400).json({
+		return response.status(400).json({
 			error: 'username must be unique'
 		})		
 	}

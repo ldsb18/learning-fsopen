@@ -62,7 +62,7 @@ describe('Viewing a specific blog', () => {
 	})
 
 	test('A specific blog with a nonexisting Id cannot be viewed, HTTP 404', async () => {
-		const validNonExistingId = await helper.nonExistingId()
+		const validNonExistingId = await helper.nonExistingBlogId()
 
 		await api
 			.get(`/api/blogs/${validNonExistingId}`)

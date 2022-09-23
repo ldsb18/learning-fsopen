@@ -6,6 +6,7 @@ const app = express()
 const cors = require('cors')
 
 const blogRouter = require ('./controllers/blogs')
+const userRouter = require('./controllers/users')
 
 const middleware = require('./utils/middleware')
 const logger = require('./utils/logger')
@@ -32,6 +33,7 @@ app.use(middleware.requestLogger)
 
 //The app router, handle request for route 'api/blogs'
 app.use('/api/blogs', blogRouter)
+app.use('/api/users', userRouter)
 
 //Middleware for handling bad URLs GET and handling error, respectively
 app.use(middleware.unknownEndpoint)

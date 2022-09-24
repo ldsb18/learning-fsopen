@@ -2,6 +2,7 @@ const blogRouter = require('express').Router()
 const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const middleware = require('../utils/middleware')
 
 blogRouter.get('/', async (request, response) => {
 	const blogs = await Blog.find({}).populate('user', {username: 1})
@@ -19,7 +20,7 @@ blogRouter.get('/:id', async (request, response, ) => {
 	}
 })
 
-blogRouter.post('/', async (request, response) => {
+blogRouter.post('/', middleware.userExtractor, async (request, response) => {
 	
 	const { title, author, url, likes } = request.body
 
@@ -31,43 +32,42 @@ blogRouter.post('/', async (request, response) => {
 		})
 	}
 
-	const user = await User.findById( decodedToken.id )
+	//const user = await User.findById( decodedToken.id )
 
 	const newBlog = new Blog({
 		title,
 		author,
 		url,
 		likes: likes || 0,
-		user: user._id
+		user: request.user._id
 	})
 
-	user.blogs = user.blogs.concat(newBlog._id)
-	await user.save()
+	request.user.blogs = request.user.blogs.concat(newBlog._id)
+	await request.user.save()
 
 	const savedNote = await newBlog.save()
 	response.status(201).json(savedNote)
 })
 
-blogRouter.delete('/:id', async (request, response) => {
+blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
 	
 	const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
 	const blogToDelete = await Blog.findById(request.params.id)
 
 	if ( blogToDelete.user.toString() !== decodedToken.id ) {
 		return response.status(401).json({
 			error: 'user do not have permission to delete this blog'
 		})
-	} else {
-		const user = await User.findById(decodedToken.id)
+	} 
 
-		user.blogs = user.blogs.filter( objectId => objectId.toString() !== blogToDelete._id.toString())
+	///const user = await User.findById(decodedToken.id)
 
-		user.save()
-		
-		await blogToDelete.remove()
-		response.status(204).end()
-	}
+	request.user.blogs = request.user.blogs.filter( objectId => objectId.toString() !== blogToDelete._id.toString())
+	request.user.save()
+	
+	await blogToDelete.remove()
+	response.status(204).end()
+
 })
 
 blogRouter.put('/:id', async (request, response) => {

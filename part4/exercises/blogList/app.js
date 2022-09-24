@@ -31,6 +31,8 @@ app.use(express.json())
 
 //Middleware for loggin on console all requests
 app.use(middleware.requestLogger)
+//Middleware for extract token and insert it in request object
+app.use(middleware.tokenExtractor)
 
 //The app router, handle request for route 'api/blogs'
 app.use('/api/blogs', blogRouter)

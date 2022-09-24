@@ -27,10 +27,10 @@ describe('Token TEST',() => {
 		}
 
 		const tokenObject = await api	
-		.post('/api/login')
-		.send(user)
-		.expect(200)
-		.expect('Content-Type', /application\/json/)
+			.post('/api/login')
+			.send(user)
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
 
 	})
 
@@ -42,10 +42,10 @@ describe('Token TEST',() => {
 		}
 
 		const tokenObject = await api	
-		.post('/api/login')
-		.send(user)
-		.expect(401)
-		.expect('Content-Type', /application\/json/)
+			.post('/api/login')
+			.send(user)
+			.expect(401)
+			.expect('Content-Type', /application\/json/)
 
 	})
 })
@@ -184,13 +184,13 @@ describe('Addition of a new blog', () => {
 	test('A valid blog with "likes" property missing can be added, HTTP 201', async () => {
 
 		const tokenObject = await api
-		.post('/api/login') 
-		.send({
-			username: 'Vaskyat',
-			password: 'Bokita+123'
-		})
-		.expect(200)
-		.expect('Content-Type', /application\/json/)
+			.post('/api/login') 
+			.send({
+				username: 'Vaskyat',
+				password: 'Bokita+123'
+			})
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
 
 		const token = tokenObject.body.token
 
@@ -213,13 +213,13 @@ describe('Addition of a new blog', () => {
 	test('An invalid blog cannot be added, HTTP 400', async () => {
 
 		const tokenObject = await api
-		.post('/api/login') 
-		.send({
-			username: 'Vaskyat',
-			password: 'Bokita+123'
-		})
-		.expect(200)
-		.expect('Content-Type', /application\/json/)
+			.post('/api/login') 
+			.send({
+				username: 'Vaskyat',
+				password: 'Bokita+123'
+			})
+			.expect(200)
+			.expect('Content-Type', /application\/json/)
 
 		const token = tokenObject.body.token
 

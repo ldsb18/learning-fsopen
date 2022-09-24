@@ -6,3 +6,19 @@ Content-Type: application/json
 	"password": "Bokita+123"
 }
 ###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+	"username": "Crymat",
+	"password": "DurotahEldroguis1!"
+}
+###
+POST http://localhost:3003/api/login
+Content-Type: application/json
+
+{
+	"username": "cuervonero_23",
+	"password": "BCS_bitch"
+}
+###

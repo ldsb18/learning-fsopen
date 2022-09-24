@@ -26,8 +26,8 @@ describe('Most blogs', () => {
 
 	test('of a bigger list is calculated right', () => {
 		expect(listHelper.mostBlogs(blogs)).toEqual({
-			author: 'Robert C. Martin',
-			blogs: 3
+			author: 'Edsger W. Dijkstra',
+			blogs: 2
 		})
 	})
 })

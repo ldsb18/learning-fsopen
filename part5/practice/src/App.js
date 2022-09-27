@@ -3,16 +3,17 @@ import { useState, useEffect } from 'react';
 import Note from './components/Note';
 import Notification from './components/Notification';
 import Footer from './components/Footer';
+import LoginForm from './components/LoginForm';
+import NoteForm from './components/NoteForm';
+import Logout from './components/Logout';
 
 import noteService from './services/notes';
 
 const App = () => {
 	const [ notes, setNotes ] = useState([]);
-	const [ newNote, setNewNote ] = useState('a new note...');
 	const [ showAll, setShowAll ] = useState(true)
 	const [ errorMessage, setErrorMessage ] = useState(null)
-	const [ username, setUsername] = useState('')
-	const [ password, setPassword] = useState('')
+	const [ user, setUser ] = useState(null)
 
 	useEffect(() => {
 		noteService
@@ -22,31 +23,14 @@ const App = () => {
 			})
 	}, [])
 
-	const addNote = (event) => {
-		event.preventDefault();
-		
-		const noteObject = {
-			content: newNote,
-			important: Math.random() < 0.5,
-			date: new Date().toISOString()
+	useEffect(() => {
+		const loggedUserJson = window.localStorage.getItem('loggedNoteappUser')
+		if (loggedUserJson) {
+			const user = JSON.parse(loggedUserJson)
+			setUser(user)
+			noteService.setToken(user.token)
 		}
-
-		noteService
-			.create(noteObject)
-			.then( createdNote => {
-				setNotes(notes.concat(createdNote));
-				setNewNote('');
-			})
-	}
-
-	const handleNoteChange = (event) => {
-		setNewNote(event.target.value);
-	}
-
-	const handleLogin = (event) => {
-		event.preventDefault()
-		console.log('login in with: ', username, password);
-	}
+	}, [])
 
 	const toggleImportanceOf = (id) => {
 		const note = notes.find(note => note.id === id);
@@ -77,32 +61,20 @@ const App = () => {
 		<div>
 
 			<h1>Notes</h1>
+
 			<Notification message={errorMessage}/>
 
-			<form onSubmit={handleLogin}>
-				<div>
-					Username: 
-					<input 
-						type="text"
-						value={username}
-						name="Username"
-						onChange={ ({ target }) =>  setUsername(target.value) }
-					/>
+			{ user === null 
+				? <LoginForm setUserState={setUser} setErrorMessage={setErrorMessage} />
+				: <div>
+					<p>{user.name} logged-in</p>
+					<Logout setUserState={setUser}/>
+					<br />
+					<br />
+					<NoteForm setNotesState={setNotes} notesState={notes} />
 				</div>
-				
-				<div>
-					Username: 
-					<input 
-						type="password"
-						value={password}
-						name="Password"
-						onChange={ ({ target }) =>  setPassword(target.value) }
-					/>
-				</div>
-
-				<button type='submit'>login</button>
-			</form>
-
+			}
+			<br />
 			<div>
 				<button onClick={() => setShowAll(!showAll)}>
 					Show { showAll ? 'important' : 'all'}
@@ -114,14 +86,6 @@ const App = () => {
 					<Note key={note.id} note={note} toggleImportance={() => toggleImportanceOf(note.id) } />
 				)}
 			</ul>
-
-			<form onSubmit={addNote}>
-				<input 
-					value={newNote} 
-					onChange={handleNoteChange} 
-				/>
-				<button type='submit'>save</button>
-			</form>
 
 			<Footer />
 		</div>

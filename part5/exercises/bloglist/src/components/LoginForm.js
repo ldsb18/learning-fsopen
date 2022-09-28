@@ -7,7 +7,7 @@ const LoginForm = ({ setUserState }) => {
 	const [ username, setUsername ] = useState('')
 	const [ password, setPassword ] = useState('')
 
-	const handleSubmit = async (event) => {
+	const handleLogin = async (event) => {
 		event.preventDefault()
 
 		try {
@@ -16,6 +16,9 @@ const LoginForm = ({ setUserState }) => {
 				password
 			})
 
+			window.localStorage.setItem(
+				'loggedUser', JSON.stringify(user)
+			)
 			setUserState(user)
 
 			setUsername('')
@@ -30,7 +33,7 @@ const LoginForm = ({ setUserState }) => {
 		<div>
 			<h1>Log-in to application</h1>
 			
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleLogin}>
 				<div>
 					username:
 					<input 

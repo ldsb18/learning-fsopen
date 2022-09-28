@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 
-
-import Blog from './components/Blogs'
+import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 
 
@@ -18,22 +17,19 @@ const App = () => {
 		})
 	}, [])
 
+	useEffect(() => {
+		const loggedUser = window.localStorage.getItem('loggedUser')
+		if (loggedUser) {
+			setUser( JSON.parse(loggedUser) )
+		}
+	}, [])
+
 	return(
 		<div>
-
 			{user === null
-				
+
 				? <LoginForm setUserState={setUser} />
-
-				: <div>
-					<h2>Blogs</h2>
-
-					<p>{user.username} logged-in</p>
-		
-					{blogs.map(blog => 
-						<Blog key={blog.id} blog={blog} />
-					)}
-				</div>
+				: <Blogs blogs={blogs} setUserState={setUser} loggedUser={user} />
 			}
 			
 		</div>

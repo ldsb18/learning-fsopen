@@ -1,3 +1,5 @@
+import blogService from '../services/blogs'
+
 const Blog = ({ blog }) => {
 	return(
 		<div>
@@ -11,6 +13,7 @@ const Blogs = ({ blogs, setUserState, loggedUser}) => {
 	const logout = () => {
 		window.localStorage.removeItem('loggedUser')
 		setUserState(null)
+		blogService.setToken(null)
 	}
 
 	return(

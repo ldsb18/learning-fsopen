@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
+import NewBlog from './components/NewBlog'
 
 
 import blogService from './services/blogs'
@@ -29,7 +30,10 @@ const App = () => {
 			{user === null
 
 				? <LoginForm setUserState={setUser} />
-				: <Blogs blogs={blogs} setUserState={setUser} loggedUser={user} />
+				: <div>
+					<Blogs blogs={blogs} setUserState={setUser} loggedUser={user} />
+					<NewBlog blogs={blogs} setBlogsState={setBlogs} />
+				</div>
 			}
 			
 		</div>

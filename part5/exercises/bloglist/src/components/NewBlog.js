@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import blogService from '../services/blogs'
 
-const NewBlog = ({ blogs, setBlogsState}) => {
+const NewBlog = ({ blogs, setBlogsState, setNotification }) => {
 
 	const [ title, setTitle ] = useState('')
 	const [ author, setAuthor ] = useState('')
@@ -20,8 +20,10 @@ const NewBlog = ({ blogs, setBlogsState}) => {
 
 			setBlogsState( blogs.concat(newBlog) )
 
+			setNotification(`Blog "${newBlog.title}" created successfully`, 'message')
+
 		} catch(exception) {
-			console.log(exception.message);
+			setNotification(exception.response.data.error, 'error');
 		}
 	}
 

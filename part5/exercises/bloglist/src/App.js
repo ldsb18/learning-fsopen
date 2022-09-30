@@ -19,14 +19,14 @@ const App = () => {
 	const [ blogs, setBlogs ] = useState([])
 	const [ user, setUser ] = useState(null)
 	const [ notification, setNotification ] = useState({
-        message: null,
-        type: ''
-    })
+		message: null,
+		type: ''
+	})
 
 	useEffect(() => {
 		blogService.getAll().then(blogs => {
 			setBlogs( blogs.sort( (a, b) => {
-				return b.likes - a.likes 
+				return b.likes - a.likes
 			}) )
 		})
 
@@ -40,7 +40,7 @@ const App = () => {
 	}, [])
 
 	const handleNotification = (message, type) => {
-		
+
 		setNotification({
 			message,
 			type
@@ -50,7 +50,7 @@ const App = () => {
 				message: null,
 				type: ''
 			})
-		}, GLOBAL_NOTIF_TIME);
+		}, GLOBAL_NOTIF_TIME)
 
 	}
 
@@ -60,32 +60,32 @@ const App = () => {
 
 			{user === null
 
-				? <LoginForm 
-					setUserState={setUser} 
-					setNotification={handleNotification} 
+				? <LoginForm
+					setUserState={setUser}
+					setNotification={handleNotification}
 				/>
 				: <div>
-					<Blogs 
-						blogs={blogs} 
+					<Blogs
+						blogs={blogs}
 						setBlogsState={setBlogs}
-						setUserState={setUser} 
-						loggedUser={user} 
+						setUserState={setUser}
+						loggedUser={user}
 						setNotification={handleNotification}
 					/>
 					<br />
 					<Togglable buttonLabel='New Blog'>
-						<NewBlog 
-							blogs={blogs} 
-							setBlogsState={setBlogs} 
-							setNotification={handleNotification} 
+						<NewBlog
+							blogs={blogs}
+							setBlogsState={setBlogs}
+							setNotification={handleNotification}
 						/>
 					</Togglable>
 				</div>
 			}
-			
+
 		</div>
 	)
 
 }
 
-export default App;
+export default App

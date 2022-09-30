@@ -30,17 +30,17 @@ const LoginForm = ({ setUserState, setNotification }) => {
 		} catch(exception) {
 			setNotification(exception.response.data.error, 'error')
 		}
-		
+
 	}
 
 	return(
 		<div>
 			<h1>Log-in to application</h1>
-			
+
 			<form onSubmit={handleLogin}>
 				<div>
 					username:
-					<input 
+					<input
 						type='text'
 						value={username}
 						name='username'
@@ -50,7 +50,7 @@ const LoginForm = ({ setUserState, setNotification }) => {
 
 				<div>
 					password:
-					<input 
+					<input
 						type='password'
 						value={password}
 						name='password'

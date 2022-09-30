@@ -23,7 +23,7 @@ const NewBlog = ({ blogs, setBlogsState, setNotification }) => {
 			setNotification(`Blog "${newBlog.title}" created successfully`, 'message')
 
 		} catch(exception) {
-			setNotification(exception.response.data.error, 'error');
+			setNotification(exception.response.data.error, 'error')
 		}
 	}
 

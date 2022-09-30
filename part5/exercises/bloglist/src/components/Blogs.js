@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 import blogService from '../services/blogs'
 
@@ -10,7 +11,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 		border: 'solid',
 		borderWidth: 1,
 		marginBottom: 5
-	  }
+	}
 
 	const [ detailed, setDetailed ] = useState(false)
 
@@ -19,7 +20,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 
 	const toogleDetails = () => {
 		setDetailed(!detailed)
-	} 
+	}
 
 
 	return(
@@ -43,7 +44,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 				</p>
 
 				<p>{ blog.user.username }</p>
-				
+
 				<div>
 					<button onClick={() => eraseBlog(blog)}>DELETE</button>
 				</div>
@@ -52,7 +53,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification}) => {
+const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification }) => {
 
 	const logout = () => {
 		window.localStorage.removeItem('loggedUser')
@@ -61,11 +62,10 @@ const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification
 	}
 
 	const addLikes = async(oneBlog) => {
-		
 		try{
-			const updatedBlog = await blogService.put(oneBlog.id ,{...oneBlog, likes: oneBlog.likes + 1})
+			const updatedBlog = await blogService.put(oneBlog.id , { ...oneBlog, likes: oneBlog.likes + 1 })
 
-			setBlogsState(blogs.map( b => b.id === updatedBlog.id ? {...b, likes: b.likes + 1} : b).sort( (a, b) => b.likes - a.likes))//updatedBlog var do not have the user property populated
+			setBlogsState(blogs.map( b => b.id === updatedBlog.id ? { ...b, likes: b.likes + 1 } : b).sort( (a, b) => b.likes - a.likes))//updatedBlog var do not have the user property populated
 		} catch(exception) {
 			setNotification(exception.response.data.error, 'error')
 		}
@@ -88,11 +88,19 @@ const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification
 
 			<p>{loggedUser.username} logged-in <button onClick={logout}>logout</button> </p>
 
-			{blogs.map(blog => 
+			{blogs.map(blog =>
 				<Blog key={blog.id} blog={blog} addLikes={addLikes} eraseBlog={eraseBlog}/>
 			)}
 		</div>
 	)
+}
+
+Blogs.propTypes = {
+	blogs: PropTypes.array.isRequired,
+	setBlogsState: PropTypes.func.isRequired,
+	setUserState: PropTypes.func.isRequired,
+	loggedUser: PropTypes.object.isRequired,
+	setNotification: PropTypes.func.isRequired
 }
 
 export default Blogs

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import blogService from '../services/blogs'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLikes }) => {
 
 	const blogStyle = {
 		paddingTop: 5,
@@ -21,6 +21,7 @@ const Blog = ({ blog }) => {
 		setDetailed(!detailed)
 	} 
 
+
 	return(
 		<div style={blogStyle}>
 			<div style={hideDetails}>
@@ -38,7 +39,7 @@ const Blog = ({ blog }) => {
 
 				<p>
 					{ blog.likes }
-					<button>Like</button>
+					<button onClick={() => addLikes(blog)}>Like</button>
 				</p>
 
 				<p>{ blog.user.username }</p>
@@ -48,12 +49,23 @@ const Blog = ({ blog }) => {
 	)
 }
 
-const Blogs = ({ blogs, setUserState, loggedUser}) => {
+const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification}) => {
 
 	const logout = () => {
 		window.localStorage.removeItem('loggedUser')
 		setUserState(null)
 		blogService.setToken(null)
+	}
+
+	const addLikes = async(oneBlog) => {
+		
+		try{
+			const updatedBlog = await blogService.put(oneBlog.id ,{...oneBlog, likes: oneBlog.likes + 1})
+
+			setBlogsState(blogs.map( b => b.id === updatedBlog.id ? {...b, likes: b.likes + 1} : b))//updatedBlog var do not have the user property populated
+		} catch(exception) {
+			setNotification(exception.response.data.error, 'error')
+		}
 	}
 
 	return(
@@ -63,7 +75,7 @@ const Blogs = ({ blogs, setUserState, loggedUser}) => {
 			<p>{loggedUser.username} logged-in <button onClick={logout}>logout</button> </p>
 
 			{blogs.map(blog => 
-				<Blog key={blog.id} blog={blog} />
+				<Blog key={blog.id} blog={blog} addLikes={addLikes} />
 			)}
 		</div>
 	)

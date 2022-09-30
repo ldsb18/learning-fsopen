@@ -57,12 +57,25 @@ const App = () => {
 
 			{user === null
 
-				? <LoginForm setUserState={setUser} setNotification={handleNotification} />
+				? <LoginForm 
+					setUserState={setUser} 
+					setNotification={handleNotification} 
+				/>
 				: <div>
-					<Blogs blogs={blogs} setUserState={setUser} loggedUser={user} />
+					<Blogs 
+						blogs={blogs} 
+						setBlogsState={setBlogs}
+						setUserState={setUser} 
+						loggedUser={user} 
+						setNotification={handleNotification}
+					/>
 					<br />
 					<Togglable buttonLabel='New Blog'>
-						<NewBlog blogs={blogs} setBlogsState={setBlogs} setNotification={handleNotification} />
+						<NewBlog 
+							blogs={blogs} 
+							setBlogsState={setBlogs} 
+							setNotification={handleNotification} 
+						/>
 					</Togglable>
 				</div>
 			}

@@ -1,6 +1,6 @@
-PUT http://localhost:3003/api/blogs/6334b739791c366be181f70c
+PUT http://localhost:3003/api/blogs/632f0f6ac5c40e1c3a2d413a
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNyeW1hdCIsImlkIjoiNjMyZjBmNmVjNWM0MGUxYzNhMmQ0MTNlIiwiaWF0IjoxNjY0NTcyNjM1LCJleHAiOjE2NjQ1NzYyMzV9.pT6u4iTevSfJtpMNmsDErwNlB1rVn-N6jmhe_T2EMYU
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImN1ZXJ2b25lcm9fMjMiLCJpZCI6IjYzMmYwZjVjYzVjNDBlMWMzYTJkNDEzMyIsImlhdCI6MTY2NDU3NDU5MSwiZXhwIjoxNjY0NTc4MTkxfQ._5dkf0FPaEDwkw9GDZMIav5ApFRir9UHJ48HuL1mB6Q
 
 {
     "title": "Stoic-programming",

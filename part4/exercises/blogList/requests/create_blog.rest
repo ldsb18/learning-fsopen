@@ -22,13 +22,13 @@ Content-Type: application/json
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNyeW1hdCIsImlkIjoiNjMyZjBmNmVjNWM0MGUxYzNhMmQ0MTNlIiwiaWF0IjoxNjY0MDM4MzI0LCJleHAiOjE2NjQwNDE5MjR9.V0ppzmg_-wrPq6rS6hmwyW3AcIqiHxtzahzfW7hs5XY
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImN1ZXJ2b25lcm9fMjMiLCJpZCI6IjYzMmYwZjVjYzVjNDBlMWMzYTJkNDEzMyIsImlhdCI6MTY2NDU3NDU5MSwiZXhwIjoxNjY0NTc4MTkxfQ._5dkf0FPaEDwkw9GDZMIav5ApFRir9UHJ48HuL1mB6Q
 
 {
-    "title": "Stoic-programming",
-    "author": "Zenon",
+    "title": "Prueba",
+    "author": "Mirar usuario",
     "url": "https://en.wikipedia.org/wiki/Stoicism",
-    "likes": 5642
+    "likes": 1234
 }
 
 

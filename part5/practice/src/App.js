@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import Note from './components/Note';
 import Notification from './components/Notification';
@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import LoginForm from './components/LoginForm';
 import NoteForm from './components/NoteForm';
 import Logout from './components/Logout';
+import Togglable from './components/Togglable'
 
 import noteService from './services/notes';
 
@@ -14,6 +15,8 @@ const App = () => {
 	const [ showAll, setShowAll ] = useState(true)
 	const [ errorMessage, setErrorMessage ] = useState(null)
 	const [ user, setUser ] = useState(null)
+
+	const noteFormRef = useRef()
 
 	useEffect(() => {
 		noteService
@@ -65,13 +68,17 @@ const App = () => {
 			<Notification message={errorMessage}/>
 
 			{ user === null 
-				? <LoginForm setUserState={setUser} setErrorMessage={setErrorMessage} />
+				? <Togglable buttonLabel='login'>
+					<LoginForm setUserState={setUser} setErrorMessage={setErrorMessage} />
+				</Togglable> 
 				: <div>
 					<p>{user.name} logged-in</p>
 					<Logout setUserState={setUser}/>
 					<br />
 					<br />
-					<NoteForm setNotesState={setNotes} notesState={notes} />
+					<Togglable buttonLabel='New note' ref={noteFormRef}>
+						<NoteForm setNotesState={setNotes} notesState={notes} noteFormRef={noteFormRef} />
+					</Togglable> 
 				</div>
 			}
 			<br />

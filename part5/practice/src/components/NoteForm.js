@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import noteService from '../services/notes'
 
-const NoteForm = ({ setNotesState, notesState }) => {
+const NoteForm = ({ setNotesState, notesState, noteFormRef}) => {
     const [ newNote, setNewNote ] = useState('');
 
 
@@ -15,6 +15,7 @@ const NoteForm = ({ setNotesState, notesState }) => {
 			date: new Date().toISOString()
 		}
 
+		noteFormRef.current.toogleVisibility()
 		noteService
 			.create(noteObject)
 			.then( createdNote => {

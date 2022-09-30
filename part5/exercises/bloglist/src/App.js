@@ -5,6 +5,7 @@ import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import NewBlog from './components/NewBlog'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 
 import blogService from './services/blogs'
@@ -52,7 +53,6 @@ const App = () => {
 
 	return(
 		<div>
-
 			<Notification notification={notification} />
 
 			{user === null
@@ -60,7 +60,10 @@ const App = () => {
 				? <LoginForm setUserState={setUser} setNotification={handleNotification} />
 				: <div>
 					<Blogs blogs={blogs} setUserState={setUser} loggedUser={user} />
-					<NewBlog blogs={blogs} setBlogsState={setBlogs} setNotification={handleNotification} />
+					<br />
+					<Togglable buttonLabel='New Blog'>
+						<NewBlog blogs={blogs} setBlogsState={setBlogs} setNotification={handleNotification} />
+					</Togglable>
 				</div>
 			}
 			

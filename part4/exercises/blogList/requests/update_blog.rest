@@ -1,0 +1,10 @@
+PUT http://localhost:3003/api/blogs/6334b739791c366be181f70c
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkNyeW1hdCIsImlkIjoiNjMyZjBmNmVjNWM0MGUxYzNhMmQ0MTNlIiwiaWF0IjoxNjY0NTcyNjM1LCJleHAiOjE2NjQ1NzYyMzV9.pT6u4iTevSfJtpMNmsDErwNlB1rVn-N6jmhe_T2EMYU
+
+{
+    "title": "Stoic-programming",
+    "author": "Zenon",
+    "url": "https://en.wikipedia.org/wiki/Stoicism",
+    "likes": 5642
+}

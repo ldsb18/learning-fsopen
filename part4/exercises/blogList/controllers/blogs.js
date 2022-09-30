@@ -68,6 +68,7 @@ blogRouter.delete('/:id', middleware.userExtractor, async (request, response) =>
 blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
 
 	const body = request.body
+	/* ANY USER CAN LIKE EVERY POST, BUT THIS CAUSES THAT EVERY USER CAN UPDATE ANY POST WITH ANY INFORMATION 	
 	const decodedToken = jwt.verify(request.token, process.env.SECRET)
 	const blogToUpdate = await Blog.findById(request.params.id)
 
@@ -75,14 +76,13 @@ blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
 		return response.status(401).json({
 			error: 'user do not have permission to update this blog'
 		})
-	} 
+	}  */
 	
 	const updatedData = {
 		title: body.title || null,
 		author: body.author || null,
 		url: body.url || null,
-		likes: body.likes || null,
-		user: request.user._id
+		likes: body.likes || null
 	}
 	
 	const updatedBlog = await Blog.findByIdAndUpdate(

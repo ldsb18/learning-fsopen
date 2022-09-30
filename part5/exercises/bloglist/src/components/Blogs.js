@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import blogService from '../services/blogs'
 
-const Blog = ({ blog, addLikes }) => {
+const Blog = ({ blog, addLikes, eraseBlog }) => {
 
 	const blogStyle = {
 		paddingTop: 5,
@@ -44,6 +44,9 @@ const Blog = ({ blog, addLikes }) => {
 
 				<p>{ blog.user.username }</p>
 				
+				<div>
+					<button onClick={() => eraseBlog(blog)}>DELETE</button>
+				</div>
 			</div>
 		</div>
 	)
@@ -62,7 +65,18 @@ const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification
 		try{
 			const updatedBlog = await blogService.put(oneBlog.id ,{...oneBlog, likes: oneBlog.likes + 1})
 
-			setBlogsState(blogs.map( b => b.id === updatedBlog.id ? {...b, likes: b.likes + 1} : b))//updatedBlog var do not have the user property populated
+			setBlogsState(blogs.map( b => b.id === updatedBlog.id ? {...b, likes: b.likes + 1} : b).sort( (a, b) => b.likes - a.likes))//updatedBlog var do not have the user property populated
+		} catch(exception) {
+			setNotification(exception.response.data.error, 'error')
+		}
+	}
+
+	const eraseBlog = async(blog) => {
+		window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
+		try {
+			await blogService.deleteBlog(blog.id)
+
+			setBlogsState( blogs.filter( b => b.id !== blog.id) )
 		} catch(exception) {
 			setNotification(exception.response.data.error, 'error')
 		}
@@ -75,7 +89,7 @@ const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification
 			<p>{loggedUser.username} logged-in <button onClick={logout}>logout</button> </p>
 
 			{blogs.map(blog => 
-				<Blog key={blog.id} blog={blog} addLikes={addLikes} />
+				<Blog key={blog.id} blog={blog} addLikes={addLikes} eraseBlog={eraseBlog}/>
 			)}
 		</div>
 	)

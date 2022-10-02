@@ -1,46 +1,37 @@
 import { useState } from 'react'
 
-import noteService from '../services/notes'
+const NoteForm = ({ createNote }) => {
+	const [ newNote, setNewNote ] = useState('')
 
-const NoteForm = ({ setNotesState, notesState, noteFormRef }) => {
-  const [ newNote, setNewNote ] = useState('')
+	const addNote = (event) => {
+		event.preventDefault()
 
+		createNote({
+			content: newNote,
+			important: Math.random > 0.5
+		})
 
-  const addNote = (event) => {
-    event.preventDefault()
+		setNewNote('')
+	}
 
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-      date: new Date().toISOString()
-    }
+	const handleNoteChange = (event) => {
+		setNewNote(event.target.value)
+	}
 
-    noteFormRef.current.toogleVisibility()
-    noteService
-      .create(noteObject)
-      .then( createdNote => {
-        setNotesState(notesState.concat(createdNote))
-        setNewNote('')
-      })
-  }
+	return (
+		<div className='formDiv'>
+			<h2>Create a new note</h2>
 
-
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
-  }
-
-
-  return (
-    <form onSubmit={addNote}>
-
-      <input
-        value={newNote}
-        onChange={handleNoteChange}
-      />
-
-      <button type='submit'>save</button>
-    </form>
-  )
+			<form onSubmit={addNote}>
+				<input
+					value={newNote}
+					onChange={handleNoteChange}
+					placeholder='write a new note'
+				/>
+				<button type='submit'>save</button>
+			</form>
+		</div>
+	)
 }
 
 export default NoteForm

@@ -5,65 +5,65 @@ import loginService from '../services/login'
 import noteService from '../services/notes'
 
 const LoginForm = ({ setUserState, setErrorMessage }) => {
-  const [ username, setUsername ] = useState('')
-  const [ password, setPassword ] = useState('')
+	const [ username, setUsername ] = useState('')
+	const [ password, setPassword ] = useState('')
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+	const handleLogin = async (event) => {
+		event.preventDefault()
 
-    try {
-      const user = await loginService.login({
-        username,
-        password
-      })
+		try {
+			const user = await loginService.login({
+				username,
+				password
+			})
 
-      window.localStorage.setItem(
-        'loggedNoteappUser', JSON.stringify(user)
-      )
+			window.localStorage.setItem(
+				'loggedNoteappUser', JSON.stringify(user)
+			)
 
-      noteService.setToken(user.token)
-      setUserState(user)
+			noteService.setToken(user.token)
+			setUserState(user)
 
-      setUsername('')
-      setPassword('')
-    } catch(exception) {
-      setErrorMessage('Wrong credential')
-      setTimeout(() => {
-        setErrorMessage(null)
-      }, 5000)
-    }
-  }
+			setUsername('')
+			setPassword('')
+		} catch(exception) {
+			setErrorMessage('Wrong credential')
+			setTimeout(() => {
+				setErrorMessage(null)
+			}, 5000)
+		}
+	}
 
-  return (
-    <form onSubmit={ handleLogin }>
-      <div>
+	return (
+		<form onSubmit={ handleLogin }>
+			<div>
 				Username:
-        <input
-          type='text'
-          value={username}
-          name='username'
-          onChange={ ({ target }) => setUsername( target.value )}
-        />
-      </div>
+				<input
+					type='text'
+					value={username}
+					name='username'
+					onChange={ ({ target }) => setUsername( target.value )}
+				/>
+			</div>
 
-      <div>
+			<div>
 				Password:
-        <input
-          type='password'
-          value={password}
-          name='Password'
-          onChange={ ({ target }) => setPassword( target.value )}
-        />
-      </div>
+				<input
+					type='password'
+					value={password}
+					name='Password'
+					onChange={ ({ target }) => setPassword( target.value )}
+				/>
+			</div>
 
-      <button type='submit'>Login</button>
-    </form>
-  )
+			<button type='submit'>Login</button>
+		</form>
+	)
 }
 
 LoginForm.propTypes = {
-  setUserState: PropTypes.func.isRequired,
-  setErrorMessage: PropTypes.func.isRequired
+	setUserState: PropTypes.func.isRequired,
+	setErrorMessage: PropTypes.func.isRequired
 }
 
 export default LoginForm

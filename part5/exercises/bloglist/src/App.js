@@ -54,6 +54,12 @@ const App = () => {
 
 	}
 
+	const logout = () => {
+		window.localStorage.removeItem('loggedUser')
+		setUser(null)
+		blogService.setToken(null)
+	}
+
 	return(
 		<div>
 			<Notification notification={notification} />
@@ -65,11 +71,11 @@ const App = () => {
 					setNotification={handleNotification}
 				/>
 				: <div>
+					<p>{user.username} logged-in <button onClick={logout}>logout</button> </p>
 					<Blogs
 						blogs={blogs}
 						setBlogsState={setBlogs}
 						setUserState={setUser}
-						loggedUser={user}
 						setNotification={handleNotification}
 					/>
 					<br />

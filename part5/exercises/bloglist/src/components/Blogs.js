@@ -25,25 +25,25 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 
 	return(
 		<div style={blogStyle}>
-			<div style={hideDetails}>
+			<div style={hideDetails} className='undetailedBlog'>
 				{ blog.title } - { blog.author }
 				<button onClick={() => toogleDetails()}>View</button>
 			</div>
 
-			<div style={showDetails}>
+			<div style={showDetails} className='detailedBlog'>
 				<p>
-					{ blog.title } - { blog.author }
+					Title: { blog.title } - by { blog.author }
 					<button onClick={() => toogleDetails()}>Hide</button>
 				</p>
 
-				<p>{ blog.url }</p>
+				<p>URL: { blog.url }</p>
 
 				<p>
-					{ blog.likes }
+					Likes: { blog.likes }
 					<button onClick={() => addLikes(blog)}>Like</button>
 				</p>
 
-				<p>{ blog.user.username }</p>
+				<p>From user: { blog.user.username }</p>
 
 				<div>
 					<button onClick={() => eraseBlog(blog)}>DELETE</button>
@@ -53,13 +53,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification }) => {
-
-	const logout = () => {
-		window.localStorage.removeItem('loggedUser')
-		setUserState(null)
-		blogService.setToken(null)
-	}
+const Blogs = ({ blogs, setBlogsState, setNotification }) => {
 
 	const addLikes = async(oneBlog) => {
 		try{
@@ -86,8 +80,6 @@ const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification
 		<div>
 			<h2>Blogs</h2>
 
-			<p>{loggedUser.username} logged-in <button onClick={logout}>logout</button> </p>
-
 			{blogs.map(blog =>
 				<Blog key={blog.id} blog={blog} addLikes={addLikes} eraseBlog={eraseBlog}/>
 			)}
@@ -98,8 +90,6 @@ const Blogs = ({ blogs, setBlogsState, setUserState, loggedUser, setNotification
 Blogs.propTypes = {
 	blogs: PropTypes.array.isRequired,
 	setBlogsState: PropTypes.func.isRequired,
-	setUserState: PropTypes.func.isRequired,
-	loggedUser: PropTypes.object.isRequired,
 	setNotification: PropTypes.func.isRequired
 }
 

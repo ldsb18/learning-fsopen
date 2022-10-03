@@ -29,21 +29,41 @@ describe('<Blogs />', () => {
 		).container
 	})
 
-	test('Renders only title and author', async () => {
+	test('Renders only title and author', () => {
 		const titleAndAuthor = container.querySelector('.undetailedBlog')
 		expect(titleAndAuthor).toHaveTextContent(
 			'Test title1 - Vaskyat'
 		)
 
-		expect(titleAndAuthor).not.toHaveTextContent(
-			'http'
-		)
+		const url = screen.queryByText('http')
+		expect(url).toBeNull()
 
-		expect(titleAndAuthor).not.toHaveTextContent(
-			'42'
-		)
+		const likes = screen.queryByText('42')
+		expect(likes).toBeNull()
 
 		const detailedDiv = container.querySelector('.detailedBlog')
 		expect(detailedDiv).toHaveStyle('display: none')
+	})
+
+	test('Shows likes and URL when "show" button clicked', async () => {
+
+		const undetailedBlog = screen.queryByText('Test title1 - Vaskyat')
+		expect(undetailedBlog).toHaveStyle('display: block')
+
+		const detailedBlog = container.querySelector('.detailedBlog')
+		expect(detailedBlog).toHaveStyle('display: none')
+
+		const user = userEvent.setup()
+		const button = screen.getByText('View')
+		await user.click(button)
+
+		expect(undetailedBlog).toHaveStyle('display: none')
+		expect(detailedBlog).toHaveStyle('display: block')
+
+		const url = screen.queryByText('http')
+		expect(url).toBeDefined()
+
+		const likes = screen.queryByText('42')
+		expect(likes).toBeDefined()
 	})
 })

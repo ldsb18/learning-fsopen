@@ -60,6 +60,27 @@ const App = () => {
 		blogService.setToken(null)
 	}
 
+	const addLikes = async(oneBlog) => {
+		try{
+			const updatedBlog = await blogService.put(oneBlog.id , { ...oneBlog, likes: oneBlog.likes + 1 })
+
+			setBlogs(blogs.map( b => b.id === updatedBlog.id ? { ...b, likes: b.likes + 1 } : b).sort( (a, b) => b.likes - a.likes))//updatedBlog var do not have the user property populated
+		} catch(exception) {
+			setNotification(exception.response.data.error, 'error')
+		}
+	}
+
+	const eraseBlog = async(blog) => {
+		window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
+		try {
+			await blogService.deleteBlog(blog.id)
+
+			setBlogs( blogs.filter( b => b.id !== blog.id) )
+		} catch(exception) {
+			setNotification(exception.response.data.error, 'error')
+		}
+	}
+
 	return(
 		<div>
 			<Notification notification={notification} />
@@ -74,9 +95,8 @@ const App = () => {
 					<p>{user.username} logged-in <button onClick={logout}>logout</button> </p>
 					<Blogs
 						blogs={blogs}
-						setBlogsState={setBlogs}
-						setUserState={setUser}
-						setNotification={handleNotification}
+						addLikes={addLikes}
+						eraseBlog={eraseBlog}
 					/>
 					<br />
 					<Togglable buttonLabel='New Blog'>

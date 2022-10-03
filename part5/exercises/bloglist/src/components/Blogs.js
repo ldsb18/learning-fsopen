@@ -1,8 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
-import blogService from '../services/blogs'
-
 const Blog = ({ blog, addLikes, eraseBlog }) => {
 
 	const blogStyle = {
@@ -40,7 +38,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 
 				<p>
 					Likes: { blog.likes }
-					<button onClick={() => addLikes(blog)}>Like</button>
+					<button className='likeButton' onClick={() => addLikes(blog)}>Like</button>
 				</p>
 
 				<p>From user: { blog.user.username }</p>
@@ -53,28 +51,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs, setBlogsState, setNotification }) => {
-
-	const addLikes = async(oneBlog) => {
-		try{
-			const updatedBlog = await blogService.put(oneBlog.id , { ...oneBlog, likes: oneBlog.likes + 1 })
-
-			setBlogsState(blogs.map( b => b.id === updatedBlog.id ? { ...b, likes: b.likes + 1 } : b).sort( (a, b) => b.likes - a.likes))//updatedBlog var do not have the user property populated
-		} catch(exception) {
-			setNotification(exception.response.data.error, 'error')
-		}
-	}
-
-	const eraseBlog = async(blog) => {
-		window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
-		try {
-			await blogService.deleteBlog(blog.id)
-
-			setBlogsState( blogs.filter( b => b.id !== blog.id) )
-		} catch(exception) {
-			setNotification(exception.response.data.error, 'error')
-		}
-	}
+const Blogs = ({ blogs, addLikes, eraseBlog }) => {
 
 	return(
 		<div>
@@ -89,8 +66,8 @@ const Blogs = ({ blogs, setBlogsState, setNotification }) => {
 
 Blogs.propTypes = {
 	blogs: PropTypes.array.isRequired,
-	setBlogsState: PropTypes.func.isRequired,
-	setNotification: PropTypes.func.isRequired
+	addLikes: PropTypes.func.isRequired,
+	eraseBlog: PropTypes.func.isRequired
 }
 
 export default Blogs

@@ -18,14 +18,12 @@ const testBlog = [
 describe('<Blogs />', () => {
 
 	let container
+	const addLikes = jest.fn()
+	const eraseBlog = jest.fn()
 
 	beforeEach(() => {
-
-		const setBlogsState = jest.fn()
-		const setNotification = jest.fn()
-
 		container  = render(
-			<Blogs blogs={testBlog} setBlogsState={setBlogsState} setNotification={setNotification} />
+			<Blogs blogs={testBlog} addLikes={addLikes} eraseBlog={eraseBlog} />
 		).container
 	})
 
@@ -65,5 +63,15 @@ describe('<Blogs />', () => {
 
 		const likes = screen.queryByText('42')
 		expect(likes).toBeDefined()
+	})
+
+	test('the likes button is clicked twice and the event handler is called twice', async () => {
+		const user = userEvent.setup()
+		const likeButton = container.querySelector('.likeButton')
+
+		await user.click(likeButton)
+		await user.click(likeButton)
+
+		expect(addLikes.mock.calls).toHaveLength(2)
 	})
 })

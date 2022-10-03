@@ -81,6 +81,24 @@ const App = () => {
 		}
 	}
 
+	const newBlog = async (blog) => {
+
+		try {
+			const newBlog = await blogService.post({
+				title: blog.title,
+				author: blog.author,
+				url: blog.url
+			})
+
+			setBlogs( blogs.concat(newBlog) )
+
+			setNotification(`Blog "${newBlog.title}" created successfully`, 'message')
+
+		} catch(exception) {
+			setNotification(exception.response.data.error, 'error')
+		}
+	}
+
 	return(
 		<div>
 			<Notification notification={notification} />
@@ -101,9 +119,7 @@ const App = () => {
 					<br />
 					<Togglable buttonLabel='New Blog'>
 						<NewBlog
-							blogs={blogs}
-							setBlogsState={setBlogs}
-							setNotification={handleNotification}
+							newBlog={newBlog}
 						/>
 					</Togglable>
 				</div>

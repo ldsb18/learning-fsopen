@@ -1,30 +1,21 @@
 import { useState } from 'react'
 
-import blogService from '../services/blogs'
-
-const NewBlog = ({ blogs, setBlogsState, setNotification }) => {
+const NewBlog = ({ newBlog }) => {
 
 	const [ title, setTitle ] = useState('')
 	const [ author, setAuthor ] = useState('')
 	const [ url, setUrl ] = useState('')
 
-	const postBlog = async (event) => {
+	const postBlog = (event) => {
 		event.preventDefault()
 
-		try {
-			const newBlog = await blogService.post({
-				title,
-				author,
-				url
-			})
-
-			setBlogsState( blogs.concat(newBlog) )
-
-			setNotification(`Blog "${newBlog.title}" created successfully`, 'message')
-
-		} catch(exception) {
-			setNotification(exception.response.data.error, 'error')
+		const blogsToPost = {
+			title, 
+			author, 
+			url
 		}
+
+		newBlog( blogsToPost )
 	}
 
 	return(
@@ -37,6 +28,7 @@ const NewBlog = ({ blogs, setBlogsState, setNotification }) => {
 						type='text'
 						value={title}
 						name="title"
+						placeholder='title'
 						onChange={ ({ target }) => setTitle( target.value )}
 					/>
 				</div>
@@ -47,6 +39,7 @@ const NewBlog = ({ blogs, setBlogsState, setNotification }) => {
 						type='text'
 						value={author}
 						name="author"
+						placeholder='author'
 						onChange={ ({ target }) => setAuthor( target.value )}
 					/>
 				</div>
@@ -57,11 +50,12 @@ const NewBlog = ({ blogs, setBlogsState, setNotification }) => {
 						type='text'
 						value={url}
 						name="url"
+						placeholder='url'
 						onChange={ ({ target }) => setUrl( target.value )}
 					/>
 				</div>
 
-				<button type='submit'>Create</button>
+				<button type='submit' className='submitButton'>Create</button>
 			</form>
 		</div>
 	)

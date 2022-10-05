@@ -87,7 +87,7 @@ const App = () => {
 					<LoginForm setUserState={setUser} setErrorMessage={setErrorMessage} />
 				</Togglable>
 				: <div>
-					<p>{user.name} logged-in</p>
+					<p>{user.name} logged in</p>
 					<Logout setUserState={setUser}/>
 					<br />
 					<br />

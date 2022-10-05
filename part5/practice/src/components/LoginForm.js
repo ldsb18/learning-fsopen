@@ -39,6 +39,7 @@ const LoginForm = ({ setUserState, setErrorMessage }) => {
 			<div>
 				Username:
 				<input
+					id='username'
 					type='text'
 					value={username}
 					name='username'
@@ -49,6 +50,7 @@ const LoginForm = ({ setUserState, setErrorMessage }) => {
 			<div>
 				Password:
 				<input
+					id='password'
 					type='password'
 					value={password}
 					name='Password'
@@ -56,7 +58,7 @@ const LoginForm = ({ setUserState, setErrorMessage }) => {
 				/>
 			</div>
 
-			<button type='submit'>Login</button>
+			<button type='submit' id='login-button'>Login</button>
 		</form>
 	)
 }

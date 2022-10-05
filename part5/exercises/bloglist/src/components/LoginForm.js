@@ -26,7 +26,7 @@ const LoginForm = ({ setUserState, setNotification }) => {
 			setUsername('')
 			setPassword('')
 
-			setNotification(`Username "${user.username} logged successfully"`)
+			setNotification(`Username "${user.username}" logged successfully`)
 		} catch(exception) {
 			setNotification(exception.response.data.error, 'error')
 		}
@@ -41,9 +41,11 @@ const LoginForm = ({ setUserState, setNotification }) => {
 				<div>
 					username:
 					<input
+						id='username'
 						type='text'
 						value={username}
 						name='username'
+						placeholder='username'
 						onChange={ ({ target }) => setUsername(target.value) }
 					/>
 				</div>
@@ -51,14 +53,16 @@ const LoginForm = ({ setUserState, setNotification }) => {
 				<div>
 					password:
 					<input
+						id='password'
 						type='password'
 						value={password}
 						name='password'
+						placeholder='password'
 						onChange={ ({ target }) => setPassword(target.value) }
 					/>
 				</div>
 
-				<button type='submit'>Login</button>
+				<button type='submit' id='loginButton'>Login</button>
 			</form>
 		</div>
 	)

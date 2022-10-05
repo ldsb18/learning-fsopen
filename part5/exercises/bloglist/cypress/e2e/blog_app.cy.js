@@ -66,6 +66,20 @@ describe('Blog app', function() {
 				cy.contains('Test blog - Cypress CLI')
 				cy.contains('View')
 			})
+
+			describe('When there are some blogs', function() {
+
+				beforeEach(function() {
+					cy.createBlog({title: 'Test blog', author: 'Cypress CLI', url: 'testing.com'})
+				})
+
+				it('A blog can be liked', function() {
+					cy.contains('View').click()
+					cy.contains('Likes: 0')
+					cy.contains('Like').click()
+					cy.contains('Likes: 1')
+				})
+			})
 		})
 	})
 })

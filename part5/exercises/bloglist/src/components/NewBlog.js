@@ -16,6 +16,9 @@ const NewBlog = ({ newBlog }) => {
 		}
 
 		newBlog( blogsToPost )
+		setTitle('')
+		setAuthor('')
+		setUrl('')
 	}
 
 	return(
@@ -25,6 +28,7 @@ const NewBlog = ({ newBlog }) => {
 				<div>
 					Title:
 					<input
+						id='title'
 						type='text'
 						value={title}
 						name="title"
@@ -36,6 +40,7 @@ const NewBlog = ({ newBlog }) => {
 				<div>
 					Author:
 					<input
+						id='author'
 						type='text'
 						value={author}
 						name="author"
@@ -47,6 +52,7 @@ const NewBlog = ({ newBlog }) => {
 				<div>
 					URL:
 					<input
+						id='url'
 						type='text'
 						value={url}
 						name="url"

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 
 import Blogs from './components/Blogs'
@@ -35,9 +35,13 @@ const App = () => {
 	useEffect(() => {
 		const loggedUser = window.localStorage.getItem('loggedUser')
 		if (loggedUser) {
-			setUser( JSON.parse(loggedUser) )
+			const user = JSON.parse(loggedUser)
+			setUser( user )
+			blogService.setToken( user.token )
 		}
 	}, [])
+
+	const newBlogRef = useRef()
 
 	const handleNotification = (message, type) => {
 
@@ -66,7 +70,7 @@ const App = () => {
 
 			setBlogs(blogs.map( b => b.id === updatedBlog.id ? { ...b, likes: b.likes + 1 } : b).sort( (a, b) => b.likes - a.likes))//updatedBlog var do not have the user property populated
 		} catch(exception) {
-			setNotification(exception.response.data.error, 'error')
+			handleNotification(exception.response.data.error, 'error')
 		}
 	}
 
@@ -76,8 +80,9 @@ const App = () => {
 			await blogService.deleteBlog(blog.id)
 
 			setBlogs( blogs.filter( b => b.id !== blog.id) )
+			handleNotification(`${blog.title} deteled successfully`, 'message')
 		} catch(exception) {
-			setNotification(exception.response.data.error, 'error')
+			handleNotification(exception.response.data.error, 'error')
 		}
 	}
 
@@ -92,10 +97,12 @@ const App = () => {
 
 			setBlogs( blogs.concat(newBlog) )
 
-			setNotification(`Blog "${newBlog.title}" created successfully`, 'message')
+			newBlogRef.current.toggleVisibility()
+
+			handleNotification(`Blog "${newBlog.title}" created successfully`, 'message')
 
 		} catch(exception) {
-			setNotification(exception.response.data.error, 'error')
+			handleNotification(exception.response.data.error, 'error')
 		}
 	}
 
@@ -117,7 +124,7 @@ const App = () => {
 						eraseBlog={eraseBlog}
 					/>
 					<br />
-					<Togglable buttonLabel='New Blog'>
+					<Togglable buttonLabel='New Blog' ref={newBlogRef}>
 						<NewBlog
 							newBlog={newBlog}
 						/>

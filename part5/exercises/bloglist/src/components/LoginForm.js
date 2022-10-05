@@ -58,7 +58,7 @@ const LoginForm = ({ setUserState, setNotification }) => {
 					/>
 				</div>
 
-				<button type='submit'>Loggin</button>
+				<button type='submit'>Login</button>
 			</form>
 		</div>
 	)

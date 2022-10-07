@@ -8,7 +8,8 @@ module.exports = {
 	},
 	'extends': [
 		'eslint:recommended',
-		'plugin:react/recommended'
+		'plugin:react/recommended',
+		'plugin:cypress/recommended'//locura lo que hice aca
 	],
 	'parserOptions': {
 		'ecmaFeatures': {

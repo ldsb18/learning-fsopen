@@ -44,7 +44,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 				<p>From user: { blog.user.username }</p>
 
 				<div>
-					<button onClick={() => eraseBlog(blog)}>DELETE</button>
+					<button id='deleteButton' onClick={() => eraseBlog(blog)}>DELETE</button>
 				</div>
 			</div>
 		</div>
@@ -58,7 +58,7 @@ const Blogs = ({ blogs, addLikes, eraseBlog }) => {
 			<h2>Blogs</h2>
 
 			{blogs.map(blog =>
-				<Blog key={blog.id} blog={blog} addLikes={addLikes} eraseBlog={eraseBlog}/>
+				<Blog key={blog.id} blog={blog} addLikes={addLikes} eraseBlog={eraseBlog} className='blogs' />
 			)}
 		</div>
 	)

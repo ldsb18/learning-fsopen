@@ -9,7 +9,14 @@ describe('Blog app', function() {
 			password: 'cypressTesting'
 		}
 
+		const anotherUser = {
+			name: 'Cypress Testing CLI2',
+			username: 'cypressTesting2',
+			password: 'cypressTesting2'
+		}
+
 		cy.request('POST', 'http://localhost:3003/api/users', user)
+		cy.request('POST', 'http://localhost:3003/api/users', anotherUser)
 
 		cy.visit('http://localhost:3000/')
 	})
@@ -70,7 +77,14 @@ describe('Blog app', function() {
 			describe('When there are some blogs', function() {
 
 				beforeEach(function() {
-					cy.createBlog({title: 'Test blog', author: 'Cypress CLI', url: 'testing.com'})
+					cy.createBlog({ title: 'Test blog', author: 'Cypress CLI', url: 'testing.com' })
+					cy.createBlog({ title: 'Test blog 2 to be deleted', author: 'Cypress CLI - delete', url: 'delete.com' })
+					cy.createBlog({ title: 'Another Test blog', author: 'Cypress CLI', url: 'anothertest.com' })
+					cy.contains('logout').click()
+					cy.login({ username: 'cypressTesting2', password: 'cypressTesting2' })
+					cy.createBlog({ title: 'Test blog from another user', author: 'Cypress CLI2', url: 'anotheruser.com' })
+					cy.contains('logout').click()
+					cy.login({ username: 'cypressTesting', password: 'cypressTesting' })
 				})
 
 				it('A blog can be liked', function() {
@@ -78,6 +92,27 @@ describe('Blog app', function() {
 					cy.contains('Likes: 0')
 					cy.contains('Like').click()
 					cy.contains('Likes: 1')
+				})
+
+				it('A blog can be deleted by the creator user', function() {
+					cy.contains('Test blog 2 to be deleted').find('button').click()
+					cy.contains('Test blog 2 to be deleted').parent().contains('DELETE').click()
+					
+					cy.get('.blogs').should('not.contain', 'Test blog 2 to be deleted')
+						.and('not.contain', 'Cypress CLI - delete')
+						.and('not.contain', 'delete.com')
+
+				})
+
+				it('A blog can not be deleted by another user', function() {
+					cy.contains('Test blog from another user').find('button').click()
+					cy.contains('Test blog from another user').parent().contains('DELETE').click()
+					
+					cy.get('.notification').should('contain', 'user do not have permission to delete this blog')
+						.and('have.css', 'color', 'rgb(255, 0, 0)')
+						.and('have.css', 'border-style', 'solid')
+
+					cy.get('.blogs').should('contain', 'Test blog from another user')
 				})
 			})
 		})

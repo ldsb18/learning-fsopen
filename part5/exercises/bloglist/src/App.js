@@ -107,7 +107,7 @@ const App = () => {
 	}
 
 	return(
-		<div>
+		<div className='appContainer'>
 			<Notification notification={notification} />
 
 			{user === null

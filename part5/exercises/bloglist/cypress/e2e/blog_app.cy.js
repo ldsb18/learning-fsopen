@@ -1,3 +1,5 @@
+const GLOBAL_WAIT_TIME = 500
+
 describe('Blog app', function() {
 	
 	beforeEach(function() {
@@ -77,12 +79,12 @@ describe('Blog app', function() {
 			describe('When there are some blogs', function() {
 
 				beforeEach(function() {
-					cy.createBlog({ title: 'Test blog', author: 'Cypress CLI', url: 'testing.com' })
+					cy.createBlog({ title: 'Test blog 1', author: 'Cypress CLI', url: 'testing.com' })
 					cy.createBlog({ title: 'Test blog 2 to be deleted', author: 'Cypress CLI - delete', url: 'delete.com' })
-					cy.createBlog({ title: 'Another Test blog', author: 'Cypress CLI', url: 'anothertest.com' })
+					cy.createBlog({ title: 'Test blog 3', author: 'Cypress CLI', url: 'anothertest.com' })
 					cy.contains('logout').click()
 					cy.login({ username: 'cypressTesting2', password: 'cypressTesting2' })
-					cy.createBlog({ title: 'Test blog from another user', author: 'Cypress CLI2', url: 'anotheruser.com' })
+					cy.createBlog({ title: 'Test blog 4 from another user', author: 'Cypress CLI2', url: 'anotheruser.com' })
 					cy.contains('logout').click()
 					cy.login({ username: 'cypressTesting', password: 'cypressTesting' })
 				})
@@ -105,14 +107,62 @@ describe('Blog app', function() {
 				})
 
 				it('A blog can not be deleted by another user', function() {
-					cy.contains('Test blog from another user').find('button').click()
-					cy.contains('Test blog from another user').parent().contains('DELETE').click()
+					cy.contains('Test blog 4 from another user').find('button').click()
+					cy.contains('Test blog 4 from another user').parent().contains('DELETE').click()
 					
 					cy.get('.notification').should('contain', 'user do not have permission to delete this blog')
 						.and('have.css', 'color', 'rgb(255, 0, 0)')
 						.and('have.css', 'border-style', 'solid')
 
-					cy.get('.blogs').should('contain', 'Test blog from another user')
+					cy.get('.blogs').should('contain', 'Test blog 4 from another user')
+				})
+
+				it('blogs are ordered by amount of likes', function() {
+					
+					cy.contains('Test blog 1').find('button').click()
+					cy.contains('Title: Test blog').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					//1 like to blog 1
+
+					cy.contains('Test blog 2 to be deleted').find('button').click()
+					cy.contains('Test blog 2 to be deleted').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					cy.contains('Test blog 2 to be deleted').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					//2 like to blog 2
+
+					cy.contains('Test blog 3').find('button').click()
+					cy.contains('Test blog 3').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					cy.contains('Test blog 3').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					cy.contains('Test blog 3').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					//3 like to blog 3
+
+					cy.contains('Test blog 4 from another user').find('button').click()
+					cy.contains('Test blog 4 from another user').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					cy.contains('Test blog 4 from another user').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					cy.contains('Test blog 4 from another user').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					cy.contains('Test blog 4 from another user').parent().find('.likeButton').click()
+					cy.wait(GLOBAL_WAIT_TIME)
+					//4 like to blog 4
+
+					cy.get('.blogs').eq(0).should('contain', 'Title: Test blog 4 from another user - by Cypress CLI2')
+						.and('contain', 'Likes: 4')
+
+					cy.get('.blogs').eq(1).should('contain', 'Test blog 3')
+						.and('contain', 'Likes: 3')
+
+					cy.get('.blogs').eq(2).should('contain', 'Test blog 2 to be deleted')
+						.and('contain', 'Likes: 2')
+
+					cy.get('.blogs').eq(3).should('contain', 'Test blog 1')
+						.and('contain', 'Likes: 1')
+
 				})
 			})
 		})

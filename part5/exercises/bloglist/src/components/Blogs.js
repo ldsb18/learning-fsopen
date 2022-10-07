@@ -25,7 +25,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 		<div style={blogStyle} className="blogs">
 			<div style={hideDetails} className='undetailedBlog'>
 				{ blog.title } - { blog.author }
-				<button onClick={() => toogleDetails()}>View</button>
+				<button id='showButton' onClick={ () => toogleDetails() }>View</button>
 			</div>
 
 			<div style={showDetails} className='detailedBlog'>

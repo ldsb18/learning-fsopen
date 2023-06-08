@@ -6,22 +6,25 @@ import reducer from './reducers/reducer'
 
 const store = createStore(reducer)
 
+const CustomButton = ({ label, action }) => 
+  <button onClick={ () => store.dispatch(action) }>
+    { label }
+  </button>
+
 const App = () => {
-  const good = () => {
-    store.dispatch({
-      type: 'GOOD'
-    })
-  }
 
   return (
     <div>
-      <button onClick={good}>good</button> 
-      <button>ok</button> 
-      <button>bad</button>
-      <button>reset stats</button>
-      <div>good {store.getState().good}</div>
-      <div>ok</div>
-      <div>bad</div>
+
+      <CustomButton   label="good"        action={ {type: 'GOOD'} }/>
+      <CustomButton   label="ok"          action={ {type: 'OK'} }/>
+      <CustomButton   label="bad"         action={ {type: 'BAD'} }/>
+      <CustomButton   label="reset stats" action={ {type: 'ZERO'} }/>
+
+      <div>good - {store.getState().good}</div>
+      <div>ok - {store.getState().ok}</div>
+      <div>bad - {store.getState().bad}</div>
+
     </div>
   )
 }

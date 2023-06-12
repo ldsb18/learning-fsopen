@@ -4,9 +4,7 @@ import { voteAnecdote } from "../reducers/anecdoteReducer"
 const Anecdote = ({ anecdote, handler}) => {
 	return(
 		<div>
-			<div>
-				{ anecdote.content }
-			</div>
+			<div>{ anecdote.content }</div>
 			<div>
 				has { anecdote.votes } 
 				<button onClick={handler}>votes</button>

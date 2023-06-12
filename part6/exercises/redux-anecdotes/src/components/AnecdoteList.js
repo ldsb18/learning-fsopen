@@ -15,9 +15,11 @@ const Anecdote = ({ anecdote, handler}) => {
 
 const AnecdoteList = () => {
 
-	const anecdotes = useSelector(state => state)
+	const anecdotes = useSelector( ({anecdotes, filter}) => {
+		return anecdotes.filter( anecdote => anecdote.content.toLowerCase().includes( filter.toLowerCase() ))
+	})
+	
 	const dispatch = useDispatch()
-
 	return (
 		<div>
 			{ anecdotes.map(anecdote =>

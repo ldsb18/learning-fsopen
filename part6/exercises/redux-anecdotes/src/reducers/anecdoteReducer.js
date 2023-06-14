@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+// PART OF PREVIOUS SERVERLESS IMPLEMENTATION :
 /* const anecdotesAtStart = [
 	'If it hurts, do it more often',
 	'Adding manpower to a late software project makes it later!',
@@ -7,7 +8,7 @@ import { createSlice } from "@reduxjs/toolkit"
 	'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
 	'Premature optimization is the root of all evil.',
 	'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
-] */
+]
 
 const getId = () => (100000 * Math.random()).toFixed(0)
 
@@ -19,8 +20,8 @@ const asObject = (anecdote) => {
 	}
 }
 
-/* const initialState = anecdotesAtStart.map(asObject)
- */
+const initialState = anecdotesAtStart.map(asObject) */
+
 
 const anecdoteSlice = createSlice({
 	name: 'anecdotes',

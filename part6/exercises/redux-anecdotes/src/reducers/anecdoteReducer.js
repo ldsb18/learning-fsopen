@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+import anecdoteService from '../services/anecdotes'
+
 // PART OF PREVIOUS SERVERLESS IMPLEMENTATION :
 /* const anecdotesAtStart = [
 	'If it hurts, do it more often',
@@ -21,7 +23,6 @@ const asObject = (anecdote) => {
 }
 
 const initialState = anecdotesAtStart.map(asObject) */
-
 
 const anecdoteSlice = createSlice({
 	name: 'anecdotes',
@@ -48,4 +49,12 @@ const anecdoteSlice = createSlice({
 })
 
 export const { newAnecdote, voteAnecdote, setAnecdotes } = anecdoteSlice.actions
+
+export const initiliazeAnecdotes = () => {
+	return async dispatch => {
+		const anecdotes = await anecdoteService.getAll()
+		dispatch( setAnecdotes( anecdotes ) )
+	}
+}
+
 export default anecdoteSlice.reducer

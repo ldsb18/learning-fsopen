@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit"
 
+import noteService from '../services/notes'
+
+// FROM PREVIOUS SERVERLESS IMPLEMENTATION :
 /* const initialState = [
 	{
 		content: 'reducer defines how redux store works',
@@ -11,19 +14,16 @@ import { createSlice } from "@reduxjs/toolkit"
 		important: false,
 		id: 2,
 	},
-] */
+]
 
 //random id number generator
 const generateId = () => Number((Math.random() * 1000000).toFixed(0))
-
+ */
 
 const noteSlice = createSlice({
 	name: 'notes',
 	initialState: [],
 	reducers : {
-		createNote(state, action) {
-			state.push(action.payload)
-		},
 		toggleImportanceOf(state, action) {
 			const id = action.payload
 			const noteToChange = state.find(note => note.id === id)
@@ -43,5 +43,20 @@ const noteSlice = createSlice({
 	}
 })
 
-export const { createNote, toggleImportanceOf, appendNote, setNotes } =  noteSlice.actions
+export const { toggleImportanceOf, appendNote, setNotes } =  noteSlice.actions
+
+export const initializeNotes = () => {
+	return async dispatch => {
+		const notes = await noteService.getAll()
+		dispatch(setNotes( notes ))
+	}
+}
+
+export const createNote = content => {
+	return async dispatch => {
+		const createdNote = await noteService.createNew(content)
+		dispatch(appendNote( createdNote ))
+	}
+}
+
 export default noteSlice.reducer

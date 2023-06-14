@@ -27,18 +27,18 @@ const anecdoteSlice = createSlice({
 	initialState: [],
 	reducers: {
 		newAnecdote(store, action) {
-			store.push(asObject(action.payload))
+			store.push( action.payload )
 		},
 		voteAnecdote(store, action) {
  			const id = action.payload
-			const anecdoteToChange = store.find(anecdote => anecdote.id === id)
+			const anecdoteToChange = store.find( anecdote => anecdote.id === id )
 
 			const changedAnecdote = {
 				...anecdoteToChange,
 				votes: anecdoteToChange.votes + 1
 			}
 
-			return store.map( anecdote => anecdote.id === id ? changedAnecdote : anecdote).sort( (a, b) => b.votes - a.votes)
+			return store.map( anecdote => anecdote.id === id ? changedAnecdote : anecdote).sort( (a, b) => b.votes - a.votes )
 		},
 		setAnecdotes(state, action) {
 			return action.payload

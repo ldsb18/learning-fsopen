@@ -2,7 +2,7 @@
   "notes": [
     {
       "content": "the app state is in redux store",
-      "important": true,
+      "important": false,
       "id": 1
     },
     {
@@ -14,6 +14,41 @@
       "content": "Hola soy una nota nueva",
       "important": false,
       "id": 3
+    },
+    {
+      "content": "Hola padre",
+      "important": true,
+      "id": 4
+    },
+    {
+      "content": "Esto tarda un toque no?",
+      "important": false,
+      "id": 5
+    },
+    {
+      "content": "666999",
+      "important": true,
+      "id": 6
+    },
+    {
+      "content": "asd",
+      "important": true,
+      "id": 7
+    },
+    {
+      "content": "kakakaka",
+      "important": true,
+      "id": 8
+    },
+    {
+      "content": "",
+      "important": true,
+      "id": 9
+    },
+    {
+      "content": "669",
+      "important": true,
+      "id": 10
     }
   ]
 }

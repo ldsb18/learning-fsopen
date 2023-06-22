@@ -36,9 +36,13 @@ const App = () => {
 		})
 	}
 
-	const result = useQuery('notes', getNotes, {
-		refetchOnWindowFocus: false
-	})
+	const result = useQuery(
+		'notes', 
+		getNotes, 
+		{
+			refetchOnWindowFocus: false
+		},
+	)
 
 	if (result.isLoading) {
 		return <div>loading data...</div>

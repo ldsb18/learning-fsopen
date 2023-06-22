@@ -20,6 +20,9 @@ const AnecdoteForm = () => {
 			const anecdotes = queryClient.getQueryData('anecdotes')
 			queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
 			notificationHandler(`anecdote '${newAnecdote.content}' has been added`)
+		},
+		onError: (err) => {
+			notificationHandler(err.response.data.error)
 		}
 	})
 

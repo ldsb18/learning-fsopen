@@ -41,7 +41,7 @@ const App = () => {
 		getNotes, 
 		{
 			refetchOnWindowFocus: false
-		},
+		}
 	)
 
 	if (result.isLoading) {

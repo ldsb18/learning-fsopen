@@ -4,15 +4,26 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 
 import { getAnecdotes, voteAnecdote } from './requests'
+import { useNotificationDispatch } from './NotificationContext'
 
 const App = () => {
 
 	const queryClient = useQueryClient()
 
+	const dispatchNotification = useNotificationDispatch()
+
+	const notificationHandler = info => {
+		dispatchNotification({ type: 'SET_NOTIF', payload: info})
+		setTimeout(() => {
+			dispatchNotification({ type: 'SET_NOTIF', payload: ''})
+		}, 5000);
+	}
+
 	const voteAnecdoteMutation = useMutation(voteAnecdote, {
 		onSuccess: updatedAnectode => {
 			const anecdotes = queryClient.getQueryData('anecdotes')
 			queryClient.setQueryData('anecdotes', anecdotes.map( anecdote => anecdote.id === updatedAnectode.id ? updatedAnectode : anecdote))
+			notificationHandler(`anecdote '${updatedAnectode.content}' voted`)
 		}
 	})
 

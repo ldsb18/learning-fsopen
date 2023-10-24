@@ -118,7 +118,7 @@ const App = () => {
 	const addNew = (anecdote) => {
 		anecdote.id = Math.round(Math.random() * 10000)
 		setAnecdotes(anecdotes.concat(anecdote))
-		setNotification('Anecdote added')
+		setNotification(`A new anecdote "${anecdote.content}" has been added`)
 		setTimeout(() => {
 			setNotification('')
 		}, 5000);
@@ -150,7 +150,7 @@ const App = () => {
 			<br />
 
 			{ notification 
-				?	<strong><p style={{color: 'green', fontSize: '20px'}}>AN ANECDOTE HAS BEEN ADDED!</p></strong>
+				?	<strong><p style={{color: 'green', fontSize: '20px'}}>{ notification }</p></strong>
 				:	null
 			}
 

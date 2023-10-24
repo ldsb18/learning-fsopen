@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { Link, Routes, Route, useMatch } from 'react-router-dom'
+import { Link, Routes, Route, useMatch, useNavigate } from 'react-router-dom'
 
 const AnecdoteList = ({ anecdotes }) => (
 	<div>
@@ -15,7 +15,7 @@ const AnecdoteList = ({ anecdotes }) => (
 	</div>
 )
 
-const Anecdote= ({ anec }) => (
+const Anecdote = ({ anec }) => (
 	<div>
 		<h2>{ anec.content }</h2>
 		<p>has { anec.votes } votes</p>
@@ -50,6 +50,8 @@ const CreateNew = (props) => {
 	const [author, setAuthor] = useState('')
 	const [info, setInfo] = useState('')
 
+	const navigate = useNavigate()
+
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
@@ -59,6 +61,10 @@ const CreateNew = (props) => {
 			info,
 			votes: 0
 		})
+		setAuthor('')
+		setContent('')
+		setInfo('')
+		navigate("/")
 	}
 
 	return (
@@ -112,6 +118,10 @@ const App = () => {
 	const addNew = (anecdote) => {
 		anecdote.id = Math.round(Math.random() * 10000)
 		setAnecdotes(anecdotes.concat(anecdote))
+		setNotification('Anecdote added')
+		setTimeout(() => {
+			setNotification('')
+		}, 5000);
 	}
 
 	const anecdoteById = (id) =>
@@ -131,10 +141,18 @@ const App = () => {
 	return (
 		<div>
 			<h1>Software anecdotes</h1>
+			
+			<div>
+				<Link style={{padding: 5}} to="/">anecdotes</Link>
+				<Link style={{padding: 5}} to="/create">create new</Link>
+				<Link style={{padding: 5}} to="/about">about</Link>
+			</div>
+			<br />
 
-			<Link style={{padding: 5}} to="/">anecdotes</Link>
-			<Link style={{padding: 5}} to="/create">create new</Link>
-			<Link style={{padding: 5}} to="/about">about</Link>
+			{ notification 
+				?	<strong><p style={{color: 'green', fontSize: '20px'}}>AN ANECDOTE HAS BEEN ADDED!</p></strong>
+				:	null
+			}
 
 			<Routes>
 				<Route path="/" element={ <AnecdoteList anecdotes={anecdotes} /> } />

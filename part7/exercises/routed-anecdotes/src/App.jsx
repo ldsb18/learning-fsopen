@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+
+import { useField } from './hooks/index'
 
 import { Link, Routes, Route, useMatch, useNavigate } from 'react-router-dom'
 
@@ -46,44 +48,51 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-	const [content, setContent] = useState('')
-	const [author, setAuthor] = useState('')
-	const [info, setInfo] = useState('')
+	const content = useField('text')
+	const author = useField('text')
+	const info = useField('text')
 
 	const navigate = useNavigate()
-
 
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		props.addNew({
-			content,
-			author,
-			info,
+			content: content.value,
+			author: author.value,
+			info: info.value,
 			votes: 0
 		})
-		setAuthor('')
-		setContent('')
-		setInfo('')
 		navigate("/")
+	}
+
+	const clearFields = () => {
+		content.onChange()
+		author.onChange()
+		info.onChange()
 	}
 
 	return (
 		<div>
-			<h2>create a new anecdote</h2>
+			<h2>Create a new anecdote</h2>
+
 			<form onSubmit={handleSubmit}>
 				<div>
-					content
-					<input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+					Content
+					<input {...content} />
 				</div>
+
 				<div>
-					author
-					<input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+					Author
+					<input {...author} />
 				</div>
+
 				<div>
-					url for more info
-					<input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+					URL for more info
+					<input {...info} />
 				</div>
-				<button>create</button>
+
+				<button type='submit'>Create</button>
+				<button type='button' onClick={() => clearFields() }>Clear</button>
 			</form>
 		</div>
 	)
@@ -143,9 +152,9 @@ const App = () => {
 			<h1>Software anecdotes</h1>
 			
 			<div>
-				<Link style={{padding: 5}} to="/">anecdotes</Link>
-				<Link style={{padding: 5}} to="/create">create new</Link>
-				<Link style={{padding: 5}} to="/about">about</Link>
+				<Link style={{padding: 5}} to="/">Anecdotes</Link>
+				<Link style={{padding: 5}} to="/create">Create new</Link>
+				<Link style={{padding: 5}} to="/about">About</Link>
 			</div>
 			<br />
 

@@ -20,22 +20,13 @@ const useField = (type) => {
 const useCountry = (name) => {
 	const [country, setCountry] = useState(null)
 
-	const fetchCountry = async (n) => {
-		const URL = `${baseURL}/name/${n}`
-		const response = await axios.get(URL)
-		console.log(response.data);
-		return response.data
-	}
-
 	const fetch = async (n) => {
 		if(n !== '') {
 			try{
-				const {name, capital, population, flags} = await fetchCountry(n)
-
-				const result = {found: 1, data: {name, capital, population, flags}}
-
-				setCountry(result)
-				//console.log(result);
+				const URL = `${baseURL}/name/${n}`
+				const response = await axios.get(URL)
+				const {name, capital, population, flags} = response.data
+				setCountry({found: 1, data: {name, capital, population, flags}})
 			} catch (e) {
 				setCountry(e);
 			}

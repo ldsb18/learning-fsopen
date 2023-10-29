@@ -1,0 +1,40 @@
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Vaskyat",
+    "name": "Root",
+    "password": "Bokita+123"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Crymat",
+    "name": "User1",
+    "password": "DurotahEldroguis1!"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "cuervonero_23",
+    "name": "User2",
+    "password": "BCS_bitch"
+}
+
+###
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "username": "Milipili",
+    "name": "User3",
+    "password": "Bokita+123"
+}
+
+###

@@ -24,28 +24,30 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', function({ username, password }) {
-    const user = {
-        username,
-        password
-    }
-    cy.request('POST', 'http://localhost:3003/api/login', user)
-        .then( ({ body }) => {
-            localStorage.setItem('loggedUser', JSON.stringify(body))
-            cy.visit('http://localhost:3000')
-        })
+Cypress.Commands.add("login", function ({ username, password }) {
+	const user = {
+		username,
+		password,
+	}
+	cy.request("POST", "http://localhost:3003/api/login", user).then(
+		({ body }) => {
+			localStorage.setItem("loggedUser", JSON.stringify(body))
+			cy.visit("http://localhost:3000")
+		},
+	)
 })
 
-Cypress.Commands.add('createBlog', function({ title, author, url }) {
+Cypress.Commands.add("createBlog", function ({ title, author, url }) {
+	cy.request({
+		url: "http://localhost:3000/api/blogs",
+		method: "POST",
+		body: { title, author, url },
+		headers: {
+			Authorization: `bearer ${
+				JSON.parse(localStorage.getItem("loggedUser")).token
+			}`,
+		},
+	})
 
-    cy.request({
-        url: 'http://localhost:3000/api/blogs',
-        method: 'POST',
-        body: { title, author, url },
-        headers: {
-            'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedUser')).token}`
-        }
-    })
-    
-    cy.visit('http://localhost:3000')
+	cy.visit("http://localhost:3000")
 })

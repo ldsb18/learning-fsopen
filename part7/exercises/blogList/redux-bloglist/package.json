@@ -10,11 +10,11 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-redux": "^8.1.3",
-		"react-scripts": "5.0.1",
+		"react-scripts": "^5.0.1",
 		"web-vitals": "^2.1.4"
 	},
 	"scripts": {
-		"start": "cross-env BROWSER=none react-scripts start",
+		"start": "cross-env react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
@@ -40,6 +40,7 @@
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^14.4.3",
 		"cypress": "^10.9.0",
+		"dotenv": "^16.3.1",
 		"eslint-config-prettier": "^9.0.0",
 		"prettier": "3.0.3"
 	}

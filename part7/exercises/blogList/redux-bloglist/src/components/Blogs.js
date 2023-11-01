@@ -1,6 +1,11 @@
 import { useState } from "react"
 import PropTypes from "prop-types"
 
+import { useDispatch } from "react-redux"
+import { setNotification } from "../reducers/notificationReducer"
+
+import blogService from '../services/blogs'
+
 const Blog = ({ blog, addLikes, eraseBlog }) => {
 	const blogStyle = {
 		paddingTop: 5,
@@ -57,7 +62,67 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs, addLikes, eraseBlog }) => {
+const Blogs = ({ blogs }) => {
+
+	const dispatch = useDispatch()
+
+	const addLikes = async oneBlog => {
+		try {
+			const updatedBlog = await blogService.put(oneBlog.id, {
+				...oneBlog,
+				likes: oneBlog.likes + 1,
+			})
+
+			/***Esto no funciona hasta que lo agregue blogs al store
+			 * *podria forwadear la funcion al componente pero no tiene sentido si tengo que modificarlo en brevs 
+			 */
+			setBlogs(
+				blogs
+					.map(b =>
+						b.id === updatedBlog.id
+							? { ...b, likes: b.likes + 1 }
+							: b,
+					)
+					.sort((a, b) => b.likes - a.likes),
+			) //updatedBlog var do not have the user property populated
+		} catch (exception) {
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
+		}
+	}
+
+	const eraseBlog = async blog => {
+		try {
+			window.confirm(`remove blog ${blog.title} by ${blog.author}?`) // If "cancel" option is selected, blog is deleted anyways .-.
+			await blogService.deleteBlog(blog.id)
+
+			/***Esto no funciona hasta que lo agregue blogs al store
+			 * *podria forwadear la funcion al componente pero no tiene sentido si tengo que modificarlo en brevs 
+			 */
+			setBlogs(blogs.filter(b => b.id !== blog.id))
+			dispatch(
+				setNotification(
+					{
+						message: `${blog.title} deteled successfully`,
+						type: "message",
+					},
+					10,
+				),
+			)
+		} catch (exception) {
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
+		}
+	}
+
 	return (
 		<div>
 			<h2>Blogs</h2>
@@ -77,8 +142,6 @@ const Blogs = ({ blogs, addLikes, eraseBlog }) => {
 
 Blogs.propTypes = {
 	blogs: PropTypes.array.isRequired,
-	addLikes: PropTypes.func.isRequired,
-	eraseBlog: PropTypes.func.isRequired,
 }
 
 export default Blogs

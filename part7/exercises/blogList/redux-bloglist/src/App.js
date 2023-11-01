@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import Blogs from "./components/Blogs"
@@ -14,8 +14,7 @@ import { logUser } from "./reducers/userReducer"
 const App = () => {
 
 	const user = useSelector(({ user }) => user)
-	const notification = useSelector(({ notification }) => notification)
-
+	
 	const dispatch = useDispatch()
 
 	const newBlogRef = useRef()
@@ -37,7 +36,7 @@ const App = () => {
 
 	return (
 		<div className="appContainer">
-			<Notification notification={notification} />
+			<Notification/>
 
 			{user === null ? (
 				<LoginForm/>

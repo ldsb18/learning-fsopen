@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux"
 import { createNew } from "../reducers/anecdoteReducer"
-import { eraseNotification, setNotification } from "../reducers/notificationReducer"
+import { setNotification } from "../reducers/notificationReducer"
 
 const AnecdoteForm = () => {
 

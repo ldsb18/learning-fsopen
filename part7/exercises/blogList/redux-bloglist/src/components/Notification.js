@@ -12,7 +12,7 @@ const Notification = ({ notification }) => {
 
 	const style = { ...baseStyle, color: color }
 
-	if (notification.message === null) {
+	if (notification.message === "") {
 		return null
 	}
 

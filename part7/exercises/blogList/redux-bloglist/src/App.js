@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react"
+import { useDispatch, useSelector } from "react-redux"
+
+import { setNotification } from "./reducers/notificationReducer"
 
 import Blogs from "./components/Blogs"
 import LoginForm from "./components/LoginForm"
@@ -8,15 +11,12 @@ import Togglable from "./components/Togglable"
 
 import blogService from "./services/blogs"
 
-const GLOBAL_NOTIF_TIME = 4000
-
 const App = () => {
 	const [blogs, setBlogs] = useState([])
 	const [user, setUser] = useState(null)
-	const [notification, setNotification] = useState({
-		message: null,
-		type: "",
-	})
+	const notification = useSelector(({ notification }) => notification)
+
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		blogService.getAll().then(blogs => {
@@ -38,19 +38,6 @@ const App = () => {
 	}, [])
 
 	const newBlogRef = useRef()
-
-	const handleNotification = (message, type) => {
-		setNotification({
-			message,
-			type,
-		})
-		setTimeout(() => {
-			setNotification({
-				message: null,
-				type: "",
-			})
-		}, GLOBAL_NOTIF_TIME)
-	}
 
 	const logout = () => {
 		window.localStorage.removeItem("loggedUser")
@@ -75,19 +62,37 @@ const App = () => {
 					.sort((a, b) => b.likes - a.likes),
 			) //updatedBlog var do not have the user property populated
 		} catch (exception) {
-			handleNotification(exception.response.data.error, "error")
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
 		}
 	}
 
 	const eraseBlog = async blog => {
-		window.confirm(`remove blog ${blog.title} by ${blog.author}?`)
 		try {
+			window.confirm(`remove blog ${blog.title} by ${blog.author}?`) // If "cancel" option is selected, blog is deleted anyways .-.
 			await blogService.deleteBlog(blog.id)
 
 			setBlogs(blogs.filter(b => b.id !== blog.id))
-			handleNotification(`${blog.title} deteled successfully`, "message")
+			dispatch(
+				setNotification(
+					{
+						message: `${blog.title} deteled successfully`,
+						type: "message",
+					},
+					10,
+				),
+			)
 		} catch (exception) {
-			handleNotification(exception.response.data.error, "error")
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
 		}
 	}
 
@@ -103,12 +108,22 @@ const App = () => {
 
 			newBlogRef.current.toggleVisibility()
 
-			handleNotification(
-				`Blog "${newBlog.title}" created successfully`,
-				"message",
+			dispatch(
+				setNotification(
+					{
+						message: `Blog "${newBlog.title}" created successfully`,
+						type: "message",
+					},
+					10,
+				),
 			)
 		} catch (exception) {
-			handleNotification(exception.response.data.error, "error")
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
 		}
 	}
 
@@ -119,7 +134,6 @@ const App = () => {
 			{user === null ? (
 				<LoginForm
 					setUserState={setUser}
-					setNotification={handleNotification}
 				/>
 			) : (
 				<div>

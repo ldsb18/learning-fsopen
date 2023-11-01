@@ -1,11 +1,10 @@
-import { useState } from "react"
-import { useDispatch } from "react-redux"
-import PropTypes from "prop-types"
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 
 import { setNotification } from "../reducers/notificationReducer"
-import { deleteBlog, likeBlog } from "../reducers/blogReducer"
+import { initializeBlogs, deleteBlog, likeBlog } from "../reducers/blogReducer"
 
-import blogService from '../services/blogs'
+import blogService from "../services/blogs"
 
 const Blog = ({ blog, addLikes, eraseBlog }) => {
 	const blogStyle = {
@@ -63,13 +62,27 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs }) => {
+const Blogs = () => {
+
+	const blogs = useSelector(({ blogs }) => blogs)
 
 	const dispatch = useDispatch()
 
+	useEffect(() => {
+		blogService.getAll().then(blogs => {
+			dispatch(
+				initializeBlogs(
+					blogs.sort((a, b) => {
+						return b.likes - a.likes
+					}),
+				),
+			)
+		})
+	}, [])
+
 	const addLikes = async oneBlog => {
 		try {
-			const updatedBlog = await blogService.put(oneBlog.id, {
+			await blogService.put(oneBlog.id, {
 				...oneBlog,
 				likes: oneBlog.likes + 1,
 			})
@@ -125,10 +138,6 @@ const Blogs = ({ blogs }) => {
 			))}
 		</div>
 	)
-}
-
-Blogs.propTypes = {
-	blogs: PropTypes.array.isRequired,
 }
 
 export default Blogs

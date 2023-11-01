@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { setNotification } from "../reducers/notificationReducer"
 import { setBlogs } from "../reducers/blogReducer"
 
-import blogService from '../services/blogs'
+import blogService from "../services/blogs"
 
 const NewBlog = ({ reference }) => {
 	const [title, setTitle] = useState("")
@@ -21,9 +21,7 @@ const NewBlog = ({ reference }) => {
 				url: blog.url,
 			})
 
-			dispatch(
-				setBlogs(newBlog)
-			)
+			dispatch(setBlogs(newBlog))
 
 			reference.current.toggleVisibility()
 

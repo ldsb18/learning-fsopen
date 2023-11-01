@@ -20,7 +20,7 @@ export const setNotification = (information, time) => {
 		dispatch(setInformation(information))
 
 		setTimeout(() => {
-			dispatch(setInformation({message: "", type: ""}))
+			dispatch(setInformation({ message: "", type: "" }))
 		}, 1000 * time)
 	}
 }

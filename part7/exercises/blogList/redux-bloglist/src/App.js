@@ -9,11 +9,11 @@ import Togglable from "./components/Togglable"
 
 import blogService from "./services/blogs"
 
-import { initializeBlogs } from "./reducers/blogReducer"
+import { logUser } from "./reducers/userReducer"
 
 const App = () => {
-	const blogs = useSelector(({blogs}) => blogs)
-	const [user, setUser] = useState(null)
+
+	const user = useSelector(({ user }) => user)
 	const notification = useSelector(({ notification }) => notification)
 
 	const dispatch = useDispatch()
@@ -21,28 +21,17 @@ const App = () => {
 	const newBlogRef = useRef()
 
 	useEffect(() => {
-		blogService.getAll().then(blogs => {
-			dispatch(initializeBlogs(
-				blogs.sort((a, b) => {
-					return b.likes - a.likes
-				}),
-			))
-		})
-	}, [])
-
-	useEffect(() => {
 		const loggedUser = window.localStorage.getItem("loggedUser")
 		if (loggedUser) {
 			const user = JSON.parse(loggedUser)
-			setUser(user)
+			dispatch(logUser(user))
 			blogService.setToken(user.token)
 		}
 	}, [])
 
-
 	const logout = () => {
 		window.localStorage.removeItem("loggedUser")
-		setUser(null)
+		dispatch(logUser(null))
 		blogService.setToken(null)
 	}
 
@@ -51,23 +40,17 @@ const App = () => {
 			<Notification notification={notification} />
 
 			{user === null ? (
-				<LoginForm
-					setUserState={setUser}
-				/>
+				<LoginForm/>
 			) : (
 				<div>
 					<p>
 						{user.username} logged-in{" "}
 						<button onClick={logout}>logout</button>{" "}
 					</p>
-					<Blogs
-						blogs={blogs}
-					/>
+					<Blogs/>
 					<br />
 					<Togglable buttonLabel="New Blog" ref={newBlogRef}>
-						<NewBlog
-							reference={newBlogRef}
-						/>
+						<NewBlog reference={newBlogRef} />
 					</Togglable>
 				</div>
 			)}

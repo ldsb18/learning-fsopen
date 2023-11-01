@@ -1,12 +1,14 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 
 import loginService from "../services/login"
 import blogService from "../services/blogs"
 
 import { setNotification } from "../reducers/notificationReducer"
-import { useDispatch } from "react-redux"
+import { logUser } from "../reducers/userReducer"
 
-const LoginForm = ({ setUserState }) => {
+
+const LoginForm = () => {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 
@@ -22,19 +24,27 @@ const LoginForm = ({ setUserState }) => {
 			})
 
 			window.localStorage.setItem("loggedUser", JSON.stringify(user))
-			setUserState(user)
+			dispatch(logUser(user))
 			blogService.setToken(user.token)
 
 			setUsername("")
 			setPassword("")
 
-			//Esto no sale nunca o es mi imaginacion?
 			dispatch(
-				setNotification({ message: `Username "${user.username}" logged successfully`, type: "message" }, 5)
+				setNotification(
+					{
+						message: `Username "${user.username}" logged successfully`,
+						type: "message",
+					},
+					5,
+				),
 			)
 		} catch (exception) {
 			dispatch(
-				setNotification({ message: exception.response.data.error, type: "error"}, 5)
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					5,
+				),
 			)
 		}
 	}

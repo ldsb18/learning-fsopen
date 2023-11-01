@@ -38,4 +38,5 @@ const deleteBlog = async id => {
 	await axios.delete(`${baseUrl}/${id}`, config)
 }
 
+// eslint-disable-next-line
 export default { setToken, getAll, post, put, deleteBlog }

@@ -1,5 +1,10 @@
-import { useState } from "react"
-import PropTypes from "prop-types"
+import { useState, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+
+import { setNotification } from "../reducers/notificationReducer"
+import { initializeBlogs, deleteBlog, likeBlog } from "../reducers/blogReducer"
+
+import blogService from "../services/blogs"
 
 const Blog = ({ blog, addLikes, eraseBlog }) => {
 	const blogStyle = {
@@ -57,7 +62,67 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs, addLikes, eraseBlog }) => {
+const Blogs = () => {
+
+	const blogs = useSelector(({ blogs }) => blogs)
+
+	const dispatch = useDispatch()
+
+	useEffect(() => {
+		blogService.getAll().then(blogs => {
+			dispatch(
+				initializeBlogs(
+					blogs.sort((a, b) => {
+						return b.likes - a.likes
+					}),
+				),
+			)
+		})
+	}, [])
+
+	const addLikes = async oneBlog => {
+		try {
+			await blogService.put(oneBlog.id, {
+				...oneBlog,
+				likes: oneBlog.likes + 1,
+			})
+
+			dispatch(likeBlog(oneBlog.id))
+		} catch (exception) {
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
+		}
+	}
+
+	const eraseBlog = async blog => {
+		try {
+			window.confirm(`remove blog ${blog.title} by ${blog.author}?`) // If "cancel" option is selected, blog is deleted anyways .-.
+			await blogService.deleteBlog(blog.id)
+
+			dispatch(deleteBlog(blog))
+			dispatch(
+				setNotification(
+					{
+						message: `${blog.title} deteled successfully`,
+						type: "message",
+					},
+					10,
+				),
+			)
+		} catch (exception) {
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
+		}
+	}
+
 	return (
 		<div>
 			<h2>Blogs</h2>
@@ -73,12 +138,6 @@ const Blogs = ({ blogs, addLikes, eraseBlog }) => {
 			))}
 		</div>
 	)
-}
-
-Blogs.propTypes = {
-	blogs: PropTypes.array.isRequired,
-	addLikes: PropTypes.func.isRequired,
-	eraseBlog: PropTypes.func.isRequired,
 }
 
 export default Blogs

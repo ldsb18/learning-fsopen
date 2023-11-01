@@ -1,9 +1,48 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 
-const NewBlog = ({ newBlog }) => {
+import { setNotification } from "../reducers/notificationReducer"
+import { setBlogs } from "../reducers/blogReducer"
+
+import blogService from "../services/blogs"
+
+const NewBlog = ({ reference }) => {
 	const [title, setTitle] = useState("")
 	const [author, setAuthor] = useState("")
 	const [url, setUrl] = useState("")
+
+	const dispatch = useDispatch()
+
+	const newBlog = async blog => {
+		try {
+			const newBlog = await blogService.post({
+				title: blog.title,
+				author: blog.author,
+				url: blog.url,
+			})
+
+			dispatch(setBlogs(newBlog))
+
+			reference.current.toggleVisibility()
+
+			dispatch(
+				setNotification(
+					{
+						message: `Blog "${newBlog.title}" created successfully`,
+						type: "message",
+					},
+					10,
+				),
+			)
+		} catch (exception) {
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					10,
+				),
+			)
+		}
+	}
 
 	const postBlog = event => {
 		event.preventDefault()

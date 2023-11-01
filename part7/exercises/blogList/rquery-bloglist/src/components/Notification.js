@@ -1,4 +1,9 @@
-const Notification = ({ notification }) => {
+import { useSelector } from "react-redux"
+
+const Notification = () => {
+
+	const notification = useSelector(({ notification }) => notification)
+
 	const baseStyle = {
 		background: "lightgrey",
 		fontSize: 20,
@@ -12,7 +17,7 @@ const Notification = ({ notification }) => {
 
 	const style = { ...baseStyle, color: color }
 
-	if (notification.message === null) {
+	if (notification.message === "") {
 		return null
 	}
 

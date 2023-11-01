@@ -1,8 +1,9 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 import PropTypes from "prop-types"
 
-import { useDispatch } from "react-redux"
 import { setNotification } from "../reducers/notificationReducer"
+import { deleteBlog, likeBlog } from "../reducers/blogReducer"
 
 import blogService from '../services/blogs'
 
@@ -73,18 +74,7 @@ const Blogs = ({ blogs }) => {
 				likes: oneBlog.likes + 1,
 			})
 
-			/***Esto no funciona hasta que lo agregue blogs al store
-			 * *podria forwadear la funcion al componente pero no tiene sentido si tengo que modificarlo en brevs 
-			 */
-			setBlogs(
-				blogs
-					.map(b =>
-						b.id === updatedBlog.id
-							? { ...b, likes: b.likes + 1 }
-							: b,
-					)
-					.sort((a, b) => b.likes - a.likes),
-			) //updatedBlog var do not have the user property populated
+			dispatch(likeBlog(oneBlog.id))
 		} catch (exception) {
 			dispatch(
 				setNotification(
@@ -100,10 +90,7 @@ const Blogs = ({ blogs }) => {
 			window.confirm(`remove blog ${blog.title} by ${blog.author}?`) // If "cancel" option is selected, blog is deleted anyways .-.
 			await blogService.deleteBlog(blog.id)
 
-			/***Esto no funciona hasta que lo agregue blogs al store
-			 * *podria forwadear la funcion al componente pero no tiene sentido si tengo que modificarlo en brevs 
-			 */
-			setBlogs(blogs.filter(b => b.id !== blog.id))
+			dispatch(deleteBlog(blog))
 			dispatch(
 				setNotification(
 					{

@@ -1,27 +1,24 @@
 const Notification = ({ notification }) => {
-
 	const baseStyle = {
-		background: 'lightgrey',
+		background: "lightgrey",
 		fontSize: 20,
-		borderStyle: 'solid',
+		borderStyle: "solid",
 		borderRadius: 5,
 		padding: 10,
-		marginBottom: 10
+		marginBottom: 10,
 	}
 
-	const color = notification.type === 'error'
-		? 'red'
-		: 'green'
+	const color = notification.type === "error" ? "red" : "green"
 
 	const style = { ...baseStyle, color: color }
 
-	if( notification.payload === null ){
+	if (notification.payload === null) {
 		return null
 	}
 
 	return (
-		<div style={style} className='notification' >
-			{ notification.payload }
+		<div style={style} className="notification">
+			{notification.payload}
 		</div>
 	)
 }

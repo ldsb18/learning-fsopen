@@ -3,16 +3,16 @@ import axios from "axios"
 const blogsUrl = "/api/blogs"
 const loginUrl = "/api/login"
 
+const loggedUser = window.localStorage.getItem("loggedUser")
+const user = JSON.parse(loggedUser)
+const token = `bearer ${user.token}`
+
 export const getBlogs = async () => {
 	const response = await axios.get(blogsUrl)
 	return response.data
 }
 
 export const createBlog = async newBlog => {
-	const loggedUser = window.localStorage.getItem("loggedUser")
-	const user = JSON.parse(loggedUser)
-	const token = `bearer ${user.token}`
-
 	const config = {
 		headers: { Authorization: token },
 	}
@@ -21,7 +21,8 @@ export const createBlog = async newBlog => {
 	return response.data
 }
 
-export const updateBlog = async (id, updatedBlog) => {
+export const updateBlog = async ({ id, updatedBlog }) => {
+
 	const config = {
 		headers: { Authorization: token },
 	}
@@ -31,6 +32,7 @@ export const updateBlog = async (id, updatedBlog) => {
 }
 
 export const deleteBlog = async id => {
+
 	const config = {
 		headers: { Authorization: token },
 	}

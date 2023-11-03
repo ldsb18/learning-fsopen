@@ -1,4 +1,9 @@
 import { useState } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+
+import { deleteBlog, updateBlog } from '../requests/requests'
+import { useNotificationDispatch } from "../contexts/notificationContext"
+
 
 const Blog = ({ blog, addLikes, eraseBlog }) => {
 	const blogStyle = {
@@ -56,7 +61,77 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 	)
 }
 
-const Blogs = ({ blogs, addLikes, eraseBlog }) => {
+const Blogs = ({ blogs }) => {
+
+	const queryClient = useQueryClient()
+	const dispatchNotification = useNotificationDispatch()
+
+	const likeBlogMutation = useMutation({
+		mutationFn: updateBlog,
+		onSuccess: (updatedBlog) => {
+			const blogs = queryClient.getQueryData(['blogs'])
+			queryClient.setQueryData(
+				['blogs'], 
+				blogs.map(b => b.id === updatedBlog.id ? updatedBlog : b)
+			)
+		},
+		onError: e => {
+			console.log(e)
+			dispatchNotification({
+				payload: e.response.data.error,
+				type: "error",
+			})
+			setTimeout(() => {
+				dispatchNotification({
+					payload: null,
+					type: "empty",
+				})
+			}, 5000)
+		},
+	})
+
+	const deleteBlogMutation = useMutation({
+		mutationFn: deleteBlog,
+		onError: e => {
+			//console.log(e)
+			dispatchNotification({
+				payload: e.response.data.error,
+				type: "error",
+			})
+			setTimeout(() => {
+				dispatchNotification({
+					payload: null,
+					type: "empty",
+				})
+			}, 5000)
+		},
+
+	})
+
+	const likeBlog = async (blog) => {
+		likeBlogMutation.mutate({
+			id: blog.id, 
+			updatedBlog: {
+			...blog, likes: blog.likes + 1 
+			},
+		})
+	}
+
+	const eraseBlog = async (blogToDelete) => {
+		window.confirm(`remove blog ${blogToDelete.title} by ${blogToDelete.author}?`)
+		try {
+			deleteBlogMutation.mutate(blogToDelete.id)
+			const blogs = queryClient.getQueryData(['blogs'])
+			queryClient.setQueryData(
+				['blogs'], 
+				blogs.filter(b => b.id !== blogToDelete.id)
+			)
+		} catch (e) {
+			console.log(e);
+		}
+
+	}
+
 	return (
 		<div>
 			<h2>Blogs</h2>
@@ -65,7 +140,7 @@ const Blogs = ({ blogs, addLikes, eraseBlog }) => {
 				<Blog
 					key={blog.id}
 					blog={blog}
-					addLikes={addLikes}
+					addLikes={likeBlog}
 					eraseBlog={eraseBlog}
 					className="blogs"
 				/>

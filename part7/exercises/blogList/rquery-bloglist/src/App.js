@@ -6,19 +6,18 @@ import NewBlog from "./components/NewBlog"
 import Notification from "./components/Notification"
 import Togglable from "./components/Togglable"
 
-import notificationContext from "./contexts/notificationContext"
+import { useNotificationValue } from "./contexts/notificationContext"
 
 import blogService from "./services/blogs"
-import { getBlogs } from "./requests/requests"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-
-const GLOBAL_NOTIF_TIME = 4000
+import  { getBlogs } from "./requests/requests"
+import { useQuery } from "@tanstack/react-query"
 
 const App = () => {
-	const queryClient = useQueryClient()
 
 	const [user, setUser] = useState(null)
-	const [notification, dispatch] = useContext(notificationContext)
+	const notification = useNotificationValue()
+
+	const newBlogRef = useRef()
 
 	useEffect(() => {
 		const loggedUser = window.localStorage.getItem("loggedUser")
@@ -30,25 +29,10 @@ const App = () => {
 	}, [])
 
 	const blogsResult = useQuery({
-		queryKey: ["blogs"],
-		queryFn: getBlogs,
+		queryKey: ['blogs'],
+		queryFn: getBlogs
 	})
 	const blogs = blogsResult.data
-
-	const newBlogRef = useRef()
-
-	const handleNotification = (payload, type) => {
-		dispatch({
-			payload,
-			type,
-		})
-		setTimeout(() => {
-			dispatch({
-				payload: null,
-				type: "empty",
-			})
-		}, GLOBAL_NOTIF_TIME)
-	}
 
 	const logout = () => {
 		window.localStorage.removeItem("loggedUser")
@@ -56,7 +40,7 @@ const App = () => {
 		blogService.setToken(null)
 	}
 
-	/* 	const addLikes = async oneBlog => {
+/* 	const addLikes = async oneBlog => {
 		try {
 			const updatedBlog = await blogService.put(oneBlog.id, {
 				...oneBlog,
@@ -89,27 +73,6 @@ const App = () => {
 		}
 	} */
 
-	/* 	const newBlog = async blog => {
-		try {
-			const newBlog = await blogService.post({
-				title: blog.title,
-				author: blog.author,
-				url: blog.url,
-			})
-
-			setBlogs(blogs.concat(newBlog))
-
-			newBlogRef.current.toggleVisibility()
-
-			handleNotification(
-				`Blog "${newBlog.title}" created successfully`,
-				"message",
-			)
-		} catch (exception) {
-			handleNotification(exception.response.data.error, "error")
-		}
-	} */
-
 	return (
 		<div className="appContainer">
 			<Notification notification={notification} />
@@ -122,18 +85,19 @@ const App = () => {
 						{user.username} logged-in{" "}
 						<button onClick={logout}>logout</button>{" "}
 					</p>
-					{blogsResult.isSuccess ? (
-						<Blogs
-							blogs={blogs}
-							addLikes={() => console.log("like")}
-							eraseBlog={() => console.log("erase")}
+					{blogsResult.isSuccess
+						? <Blogs 
+							blogs={
+								blogs.sort((a, b) => {
+									return b.likes - a.likes
+								})
+							}
 						/>
-					) : (
-						<div> loading blogs... </div>
-					)}
+						: <div> loading blogs... </div>
+					}
 					<br />
 					<Togglable buttonLabel="New Blog" ref={newBlogRef}>
-						<NewBlog reference={newBlogRef} />
+						<NewBlog reference={newBlogRef}/>
 					</Togglable>
 				</div>
 			)}

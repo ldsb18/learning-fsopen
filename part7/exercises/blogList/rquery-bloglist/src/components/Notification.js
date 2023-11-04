@@ -1,4 +1,9 @@
-const Notification = ({ notification }) => {
+import { useNotificationValue } from "../contexts/notificationContext"
+
+const Notification = () => {
+
+	const notification = useNotificationValue()
+
 	const baseStyle = {
 		background: "lightgrey",
 		fontSize: 20,

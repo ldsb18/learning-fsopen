@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { createBlog } from "../requests/requests"
 
+import { useUserValue } from '../contexts/userContext'
 import { useNotificationDispatch } from "../contexts/notificationContext"
 
 const NewBlog = ({ reference }) => {
@@ -10,45 +11,43 @@ const NewBlog = ({ reference }) => {
 	const [author, setAuthor] = useState("")
 	const [url, setUrl] = useState("")
 
-	const dispatchNotification = useNotificationDispatch()
+	const user = useUserValue()
 
 	const queryClient = useQueryClient()
+	const dispatchFunc = useNotificationDispatch()
+	const customDispatch = ({ payload, type}) => {
+		dispatchFunc({ payload, type })
+		setTimeout(() => {
+			dispatchFunc({
+				payload: null,
+				type: "empty"
+			})
+		}, 5000)
+	}
 
 	const newBlogMutation = useMutation({
 		mutationFn: createBlog,
 		onSuccess: newBlog => {
 			const blogs = queryClient.getQueryData(["blogs"])
 			queryClient.setQueryData(["blogs"], blogs.concat(newBlog))
-			dispatchNotification({
+			customDispatch({
 				payload: `Blog "${newBlog.title}" created successfully`,
 				type: "message",
 			})
-			setTimeout(() => {
-				dispatchNotification({
-					payload: null,
-					type: "empty",
-				})
-			}, 5000)
 		},
 		onError: e => {
 			console.log(e)
-			dispatchNotification({
+			customDispatch({
 				payload: e.response.data.error,
 				type: "error",
 			})
-			setTimeout(() => {
-				dispatchNotification({
-					payload: null,
-					type: "empty",
-				})
-			}, 5000)
 		},
 	})
 
 	const postBlog = async event => {
 		event.preventDefault()
 
-		newBlogMutation.mutate({ title, author, url })
+		newBlogMutation.mutate({ title, author, url, user })
 
 		reference.current.toggleVisibility()
 

@@ -1,44 +1,52 @@
 import { useState } from "react"
 
-import loginService from "../services/login"
-import blogService from "../services/blogs"
+import { login } from "../requests/requests"
 
 import { useNotificationDispatch } from "../contexts/notificationContext"
+import { useUserDispatch } from "../contexts/userContext"
 
-const LoginForm = ({ setUserState }) => {
+const LoginForm = () => {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 
-	const dispatch = useNotificationDispatch()
+	const userDispatch = useUserDispatch()
+	const dispatchFunc = useNotificationDispatch()
+
+	const customDispatch = ({ payload, type}) => {
+		dispatchFunc({ payload, type })
+		setTimeout(() => {
+			dispatchFunc({
+				payload: null,
+				type: "empty"
+			})
+		}, 5000)
+	}
 
 	const handleLogin = async event => {
 		event.preventDefault()
 
 		try {
-			const user = await loginService.login({
+			const user = await login({
 				username,
 				password,
 			})
 
 			window.localStorage.setItem("loggedUser", JSON.stringify(user))
-			setUserState(user)
-			blogService.setToken(user.token)
+			userDispatch({
+				payload: user,
+				type: "login"
+			})
 
 			setUsername("")
 			setPassword("")
 
-			dispatch({
+			customDispatch({
 				payload: `Username "${user.username}" logged successfully`,
 				type: "message",
 			})
-			setTimeout(() => {
-				dispatch({ payload: null, type: "empty" })
-			}, 5000)
 		} catch (exception) {
-			dispatch({ payload: exception.response.data.error, type: "error" })
-			setTimeout(() => {
-				dispatch({ payload: null, type: "empty" })
-			}, 5000)
+			console.log(exception);
+			customDispatch({ payload: exception.response.data.error, type: "error" })
 		}
 	}
 

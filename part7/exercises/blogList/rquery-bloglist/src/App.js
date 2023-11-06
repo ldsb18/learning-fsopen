@@ -10,23 +10,22 @@ import Togglable from "./components/Togglable"
 import userContext from "./contexts/userContext"
 import { NotificationContextProvider } from "./contexts/notificationContext"
 
-import  { getBlogs } from "./requests/requests"
+import { getBlogs } from "./requests/requests"
 
 const App = () => {
-
 	const [user, userDispatch] = useContext(userContext)
 	const newBlogRef = useRef()
 
-	useEffect(() => {	
+	useEffect(() => {
 		userDispatch({
 			payload: null,
-			type: "initialize"
-		})		
-	}, []) 
+			type: "initialize",
+		})
+	}, [])
 
 	const blogsResult = useQuery({
-		queryKey: ['blogs'],
-		queryFn: getBlogs
+		queryKey: ["blogs"],
+		queryFn: getBlogs,
 	})
 	const blogs = blogsResult.data
 
@@ -34,15 +33,15 @@ const App = () => {
 		window.localStorage.removeItem("loggedUser")
 		userDispatch({
 			payload: null,
-			type: "logout"
+			type: "logout",
 		})
 	}
 
 	return (
 		<div className="appContainer">
 			<NotificationContextProvider>
-				<Notification/>
-		
+				<Notification />
+
 				{user === null ? (
 					<LoginForm />
 				) : (
@@ -51,22 +50,21 @@ const App = () => {
 							{user.username} logged-in{" "}
 							<button onClick={logout}>logout</button>{" "}
 						</p>
-						{blogsResult.isSuccess
-							? <Blogs 
-								blogs={
-									blogs.sort((a, b) => {
-										return b.likes - a.likes
-									})
-								}
+						{blogsResult.isSuccess ? (
+							<Blogs
+								blogs={blogs.sort((a, b) => {
+									return b.likes - a.likes
+								})}
 							/>
-							: <div> loading blogs... </div>
-						}
+						) : (
+							<div> loading blogs... </div>
+						)}
 						<br />
 						<Togglable buttonLabel="New Blog" ref={newBlogRef}>
-							<NewBlog reference={newBlogRef}/>
+							<NewBlog reference={newBlogRef} />
 						</Togglable>
 					</div>
-			)}
+				)}
 			</NotificationContextProvider>
 		</div>
 	)

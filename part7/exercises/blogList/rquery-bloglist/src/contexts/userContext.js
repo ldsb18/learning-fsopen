@@ -8,7 +8,7 @@ const userReducer = (state, action) => {
 			return action.payload
 		case "initialize": {
 			const loggedUser = window.localStorage.getItem("loggedUser")
-			if(loggedUser) {
+			if (loggedUser) {
 				return JSON.parse(loggedUser)
 			} else {
 				return action.payload
@@ -22,14 +22,10 @@ const userReducer = (state, action) => {
 const userContext = createContext()
 
 export const UserContextProvider = props => {
-	const [user, userDispatch] = useReducer(
-		userReducer,
-		null,
-	)
+	const [user, userDispatch] = useReducer(userReducer, null)
 
 	return (
-		<userContext.Provider
-			value={[user, userDispatch]}>
+		<userContext.Provider value={[user, userDispatch]}>
 			{props.children}
 		</userContext.Provider>
 	)

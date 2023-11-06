@@ -12,8 +12,9 @@ import blogService from "./services/blogs"
 import { logUser } from "./reducers/userReducer"
 
 const App = () => {
-	const user = useSelector(({ user }) => user)
 
+	const user = useSelector(({ user }) => user)
+	
 	const dispatch = useDispatch()
 
 	const newBlogRef = useRef()
@@ -35,17 +36,17 @@ const App = () => {
 
 	return (
 		<div className="appContainer">
-			<Notification />
+			<Notification/>
 
 			{user === null ? (
-				<LoginForm />
+				<LoginForm/>
 			) : (
 				<div>
 					<p>
 						{user.username} logged-in{" "}
 						<button onClick={logout}>logout</button>{" "}
 					</p>
-					<Blogs />
+					<Blogs/>
 					<br />
 					<Togglable buttonLabel="New Blog" ref={newBlogRef}>
 						<NewBlog reference={newBlogRef} />

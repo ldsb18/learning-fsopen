@@ -4,7 +4,6 @@ const blogsUrl = "/api/blogs"
 const loginUrl = "/api/login"
 
 export const getBlogs = async () => {
-
 	const response = await axios.get(blogsUrl)
 	return response.data
 }
@@ -15,7 +14,6 @@ export const login = async user => {
 }
 
 export const createBlog = async ({ title, author, url, user }) => {
-
 	const config = {
 		headers: { Authorization: `bearer ${user.token}` },
 	}
@@ -24,8 +22,7 @@ export const createBlog = async ({ title, author, url, user }) => {
 	return response.data
 }
 
-export const updateBlog = async ({ id, updatedBlog , user }) => {
-
+export const updateBlog = async ({ id, updatedBlog, user }) => {
 	const config = {
 		headers: { Authorization: `bearer ${user.token}` },
 	}
@@ -35,7 +32,6 @@ export const updateBlog = async ({ id, updatedBlog , user }) => {
 }
 
 export const deleteBlog = async ({ id, user }) => {
-
 	const config = {
 		headers: { Authorization: `bearer ${user.token}` },
 	}

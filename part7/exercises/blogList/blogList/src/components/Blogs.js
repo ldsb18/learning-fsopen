@@ -63,6 +63,7 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 }
 
 const Blogs = () => {
+
 	const blogs = useSelector(({ blogs }) => blogs)
 
 	const dispatch = useDispatch()

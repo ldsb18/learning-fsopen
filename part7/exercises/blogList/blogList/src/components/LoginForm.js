@@ -1,54 +1,51 @@
 import { useState } from "react"
+import { useDispatch } from "react-redux"
 
-import { login } from "../requests/requests"
+import loginService from "../services/login"
+import blogService from "../services/blogs"
 
-import { useNotificationDispatch } from "../contexts/notificationContext"
-import { useUserDispatch } from "../contexts/userContext"
+import { setNotification } from "../reducers/notificationReducer"
+import { logUser } from "../reducers/userReducer"
+
 
 const LoginForm = () => {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 
-	const userDispatch = useUserDispatch()
-	const dispatchFunc = useNotificationDispatch()
-	const customDispatch = ({ payload, type }) => {
-		dispatchFunc({ payload, type })
-		setTimeout(() => {
-			dispatchFunc({
-				payload: null,
-				type: "empty",
-			})
-		}, 5000)
-	}
+	const dispatch = useDispatch()
 
 	const handleLogin = async event => {
 		event.preventDefault()
 
 		try {
-			const user = await login({
+			const user = await loginService.login({
 				username,
 				password,
 			})
 
 			window.localStorage.setItem("loggedUser", JSON.stringify(user))
-			userDispatch({
-				payload: user,
-				type: "login",
-			})
+			dispatch(logUser(user))
+			blogService.setToken(user.token)
 
 			setUsername("")
 			setPassword("")
 
-			customDispatch({
-				payload: `Username "${user.username}" logged successfully`,
-				type: "message",
-			})
+			dispatch(
+				setNotification(
+					{
+						message: `Username "${user.username}" logged successfully`,
+						type: "message",
+					},
+					5,
+				),
+			)
 		} catch (exception) {
-			console.log(exception)
-			customDispatch({
-				payload: exception.response.data.error,
-				type: "error",
-			})
+			dispatch(
+				setNotification(
+					{ message: exception.response.data.error, type: "error" },
+					5,
+				),
+			)
 		}
 	}
 

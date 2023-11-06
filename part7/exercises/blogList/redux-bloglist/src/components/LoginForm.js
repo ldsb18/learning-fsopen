@@ -7,7 +7,6 @@ import blogService from "../services/blogs"
 import { setNotification } from "../reducers/notificationReducer"
 import { logUser } from "../reducers/userReducer"
 
-
 const LoginForm = () => {
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")

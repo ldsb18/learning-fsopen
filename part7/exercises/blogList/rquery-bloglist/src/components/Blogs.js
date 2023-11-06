@@ -1,11 +1,10 @@
 import { useState } from "react"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 
-import { deleteBlog, updateBlog } from '../requests/requests'
+import { deleteBlog, updateBlog } from "../requests/requests"
 
 import { useNotificationDispatch } from "../contexts/notificationContext"
 import { useUserValue } from "../contexts/userContext"
-
 
 const Blog = ({ blog, addLikes, eraseBlog }) => {
 	const blogStyle = {
@@ -64,28 +63,27 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 }
 
 const Blogs = ({ blogs }) => {
-
 	const queryClient = useQueryClient()
-	
+
 	const user = useUserValue()
 	const dispatchFunc = useNotificationDispatch()
-	const customDispatch = ({ payload, type}) => {
+	const customDispatch = ({ payload, type }) => {
 		dispatchFunc({ payload, type })
 		setTimeout(() => {
 			dispatchFunc({
 				payload: null,
-				type: "empty"
+				type: "empty",
 			})
 		}, 5000)
 	}
 
 	const likeBlogMutation = useMutation({
 		mutationFn: updateBlog,
-		onSuccess: (updatedBlog) => {
-			const blogs = queryClient.getQueryData(['blogs'])
+		onSuccess: updatedBlog => {
+			const blogs = queryClient.getQueryData(["blogs"])
 			queryClient.setQueryData(
-				['blogs'], 
-				blogs.map(b => b.id === updatedBlog.id ? updatedBlog : b)
+				["blogs"],
+				blogs.map(b => (b.id === updatedBlog.id ? updatedBlog : b)),
 			)
 		},
 		onError: e => {
@@ -106,39 +104,40 @@ const Blogs = ({ blogs }) => {
 				type: "error",
 			})
 		},
-
 	})
 
-	const likeBlog = async (blog) => {
+	const likeBlog = async blog => {
 		likeBlogMutation.mutate({
-			id: blog.id, 
+			id: blog.id,
 			updatedBlog: {
-			...blog, likes: blog.likes + 1 
+				...blog,
+				likes: blog.likes + 1,
 			},
-			user
+			user,
 		})
 	}
 
-	const eraseBlog = async (blogToDelete) => {
-		window.confirm(`remove blog ${blogToDelete.title} by ${blogToDelete.author}?`)
+	const eraseBlog = async blogToDelete => {
+		window.confirm(
+			`remove blog ${blogToDelete.title} by ${blogToDelete.author}?`,
+		)
 		try {
 			deleteBlogMutation.mutate({
 				id: blogToDelete.id,
-				user
+				user,
 			})
-			const blogs = queryClient.getQueryData(['blogs'])
+			const blogs = queryClient.getQueryData(["blogs"])
 			queryClient.setQueryData(
-				['blogs'], 
-				blogs.filter(b => b.id !== blogToDelete.id)
+				["blogs"],
+				blogs.filter(b => b.id !== blogToDelete.id),
 			)
 			customDispatch({
 				payload: `Blog ${blogToDelete.title} was erased succesfully`,
-				type: "message"
+				type: "message",
 			})
 		} catch (e) {
-			console.log(e);
+			console.log(e)
 		}
-
 	}
 
 	return (

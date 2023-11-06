@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query"
 
 import { createBlog } from "../requests/requests"
 
-import { useUserValue } from '../contexts/userContext'
+import { useUserValue } from "../contexts/userContext"
 import { useNotificationDispatch } from "../contexts/notificationContext"
 
 const NewBlog = ({ reference }) => {
@@ -15,12 +15,12 @@ const NewBlog = ({ reference }) => {
 
 	const queryClient = useQueryClient()
 	const dispatchFunc = useNotificationDispatch()
-	const customDispatch = ({ payload, type}) => {
+	const customDispatch = ({ payload, type }) => {
 		dispatchFunc({ payload, type })
 		setTimeout(() => {
 			dispatchFunc({
 				payload: null,
-				type: "empty"
+				type: "empty",
 			})
 		}, 5000)
 	}

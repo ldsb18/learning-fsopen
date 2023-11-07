@@ -15,11 +15,15 @@ import blogService from "./services/blogs"
 
 import { logUser } from "./reducers/loggedUserReducer"
 
+const style = {
+	padding: 5
+}
+
+
 const App = () => {
 	const loggedUser = useSelector(({ loggedUser }) => loggedUser)
 
 	const dispatch = useDispatch()
-
 
 	useEffect(() => {
 		const loggedUser_local = window.localStorage.getItem("loggedUser")
@@ -44,15 +48,18 @@ const App = () => {
 				<LoginForm />
 			) : (
 				<Router>
+
+					<div>
+						<Link style={style} to="/" >BLOGS</Link>
+						<Link style={style} to="/users" >USERS</Link>
+						<span>{loggedUser.username} logged-in <button onClick={logout}>logout</button></span>
+					</div>
+
 					<div>
 						<h1>Blogs application</h1>
-						<div>
-							<p>{loggedUser.username} logged-in</p>
-							<button onClick={logout}>logout</button>
-						</div>
 
 						<Routes>
-							<Route path="/" element={<Blogs />} />
+							<Route path="*" element={<Blogs />} />
 							<Route path="/users/*" element={<Users />} />
 						</Routes>
 

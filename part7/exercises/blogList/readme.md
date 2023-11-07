@@ -1,6 +1,6 @@
 # About the exercises
 
->There is 4 applications here, every app have prettier instaled (exercise 7.9):
+There is 4 applications here, every app have prettier instaled (exercise 7.9):
 
 # 1- backend-blogList
 This is the backend for the applicaction, this is common for every part

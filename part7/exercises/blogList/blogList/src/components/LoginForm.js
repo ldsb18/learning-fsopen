@@ -5,8 +5,7 @@ import loginService from "../services/login"
 import blogService from "../services/blogs"
 
 import { setNotification } from "../reducers/notificationReducer"
-import { logUser } from "../reducers/userReducer"
-
+import { logUser } from "../reducers/loggedUserReducer"
 
 const LoginForm = () => {
 	const [username, setUsername] = useState("")

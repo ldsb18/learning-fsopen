@@ -1,28 +1,30 @@
-import { useEffect, useRef } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import Blogs from "./components/Blogs"
-import LoginForm from "./components/LoginForm"
-import NewBlog from "./components/NewBlog"
+import {
+	BrowserRouter as Router,
+	Routes, Route, Link
+} from 'react-router-dom'
+
 import Notification from "./components/Notification"
-import Togglable from "./components/Togglable"
+import Blogs from "./components/Blogs"
+import Users from "./components/Users"
+import LoginForm from "./components/LoginForm"
 
 import blogService from "./services/blogs"
 
-import { logUser } from "./reducers/userReducer"
+import { logUser } from "./reducers/loggedUserReducer"
 
 const App = () => {
+	const loggedUser = useSelector(({ loggedUser }) => loggedUser)
 
-	const user = useSelector(({ user }) => user)
-	
 	const dispatch = useDispatch()
 
-	const newBlogRef = useRef()
 
 	useEffect(() => {
-		const loggedUser = window.localStorage.getItem("loggedUser")
-		if (loggedUser) {
-			const user = JSON.parse(loggedUser)
+		const loggedUser_local = window.localStorage.getItem("loggedUser")
+		if (loggedUser_local) {
+			const user = JSON.parse(loggedUser_local)
 			dispatch(logUser(user))
 			blogService.setToken(user.token)
 		}
@@ -36,22 +38,26 @@ const App = () => {
 
 	return (
 		<div className="appContainer">
-			<Notification/>
+			<Notification />
 
-			{user === null ? (
-				<LoginForm/>
+			{loggedUser === null ? (
+				<LoginForm />
 			) : (
-				<div>
-					<p>
-						{user.username} logged-in{" "}
-						<button onClick={logout}>logout</button>{" "}
-					</p>
-					<Blogs/>
-					<br />
-					<Togglable buttonLabel="New Blog" ref={newBlogRef}>
-						<NewBlog reference={newBlogRef} />
-					</Togglable>
-				</div>
+				<Router>
+					<div>
+						<h1>Blogs application</h1>
+						<div>
+							<p>{loggedUser.username} logged-in</p>
+							<button onClick={logout}>logout</button>
+						</div>
+
+						<Routes>
+							<Route path="/" element={<Blogs />} />
+							<Route path="/users" element={<Users />} />
+						</Routes>
+
+					</div>
+				</Router>
 			)}
 		</div>
 	)

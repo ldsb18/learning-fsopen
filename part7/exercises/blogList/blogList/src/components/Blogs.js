@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { setNotification } from "../reducers/notificationReducer"
 import { initializeBlogs, deleteBlog, likeBlog } from "../reducers/blogReducer"
+
+import NewBlog from "../components/NewBlog"
+import Togglable from "../components/Togglable"
 
 import blogService from "../services/blogs"
 
@@ -63,10 +66,11 @@ const Blog = ({ blog, addLikes, eraseBlog }) => {
 }
 
 const Blogs = () => {
-
 	const blogs = useSelector(({ blogs }) => blogs)
 
 	const dispatch = useDispatch()
+
+	const newBlogRef = useRef()
 
 	useEffect(() => {
 		blogService.getAll().then(blogs => {
@@ -125,6 +129,7 @@ const Blogs = () => {
 
 	return (
 		<div>
+
 			<h2>Blogs</h2>
 
 			{blogs.map(blog => (
@@ -136,6 +141,11 @@ const Blogs = () => {
 					className="blogs"
 				/>
 			))}
+
+			<Togglable buttonLabel="New Blog" ref={newBlogRef}>
+				<NewBlog reference={newBlogRef} />
+			</Togglable>
+			
 		</div>
 	)
 }

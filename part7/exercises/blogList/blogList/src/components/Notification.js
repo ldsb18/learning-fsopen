@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux"
 
 const Notification = () => {
-
 	const notification = useSelector(({ notification }) => notification)
 
 	const baseStyle = {

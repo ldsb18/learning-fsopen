@@ -24,32 +24,24 @@ const Blog = ({ blog }) => {
 			<div>
 				<Link to={`/blogs/${blog.id}`} >{blog.title} - {blog.author}</Link>
 			</div>
+		</div>
+	)
+}
 
-			{/* <div style={showDetails} className="detailedBlog">
-				<p>
-					Title: {blog.title} - by {blog.author}
-					<button onClick={() => toogleDetails()}>Hide</button>
-				</p>
+const Comments = ({ comments }) => {
 
-				<p>URL: {blog.url}</p>
+	return (
+		<div>
+			<h2>Comments:</h2>
 
-				<p>
-					Likes: {blog.likes}
-					<button
-						className="likeButton"
-						onClick={() => addLikes(blog)}>
-						Like
-					</button>
-				</p>
-
-				<p>From user: {blog.user.username}</p>
-
-				<div>
-					<button id="deleteButton" onClick={() => eraseBlog(blog)}>
-						DELETE
-					</button>
-				</div>
-			</div> */}
+			<ul>
+				{comments.length !== 0
+					?	comments.map((cmt, index) => (
+							<li key={index}> { cmt } </li>
+						))
+					:	<p>Nothing here...</p>
+				}
+			</ul>
 		</div>
 	)
 }
@@ -153,6 +145,8 @@ const DetailedBlog = ({ blog }) => {
 					DELETE
 				</button>
 			</div>
+
+			<Comments comments={blog.comments}/>
 		</div>
 	)
 }
@@ -178,49 +172,6 @@ const Blogs = () => {
 			)
 		})
 	}, [])
-
-	/* const addLikes = async oneBlog => {
-		try {
-			await blogService.put(oneBlog.id, {
-				...oneBlog,
-				likes: oneBlog.likes + 1,
-			})
-
-			dispatch(likeBlog(oneBlog.id))
-		} catch (exception) {
-			dispatch(
-				setNotification(
-					{ message: exception.response.data.error, type: "error" },
-					10,
-				),
-			)
-		}
-	}
-
-	const eraseBlog = async blog => {
-		try {
-			window.confirm(`remove blog ${blog.title} by ${blog.author}?`) // If "cancel" option is selected, blog is deleted anyways .-.
-			await blogService.deleteBlog(blog.id)
-
-			dispatch(deleteBlog(blog))
-			dispatch(
-				setNotification(
-					{
-						message: `${blog.title} deteled successfully`,
-						type: "message",
-					},
-					10,
-				),
-			)
-		} catch (exception) {
-			dispatch(
-				setNotification(
-					{ message: exception.response.data.error, type: "error" },
-					10,
-				),
-			)
-		}
-	} */
 
 	return (
 		<div>

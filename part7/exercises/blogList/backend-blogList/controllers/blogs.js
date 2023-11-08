@@ -21,7 +21,7 @@ blogRouter.get('/:id', async (request, response, ) => {
 
 blogRouter.post('/', middleware.userExtractor, async (request, response) => {
 	
-	const { title, author, url, likes } = request.body
+	const { title, author, url, likes, comments } = request.body
 
 	const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
@@ -36,6 +36,7 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
 		author,
 		url,
 		likes: likes || 0,
+		comments: comments || [],
 		user: request.user._id
 	})
 
@@ -45,6 +46,42 @@ blogRouter.post('/', middleware.userExtractor, async (request, response) => {
 	await request.user.save()
 
 	response.status(201).json(savedNote)
+})
+
+blogRouter.post('/:id/comments', middleware.userExtractor, async (request, response) => {
+	
+	const { newComment } = request.body
+
+	const decodedToken = jwt.verify(request.token, process.env.SECRET)
+
+	if (!decodedToken.id) { 
+		return response.status(401).json({
+			error: 'token invalid or missing'
+		})
+	}
+
+	const blogToComment = await Blog.findById(request.params.id)
+
+	if (!blogToComment) { 
+		return response.status(404).json({
+			error: 'Invalid blog ID'
+		})
+	}
+
+	const updatedData = {
+		title: blogToComment.title,
+		author: blogToComment.author,
+		url: blogToComment.url,
+		likes: blogToComment.likes,
+		comments: blogToComment.comments.concat(newComment)
+	}
+
+	const commentedBlog = await Blog.findByIdAndUpdate(
+		request.params.id,
+		updatedData,
+		{ new: true, runValidators: true, context: 'query' }).populate('user', {username: 1})
+
+	response.json(commentedBlog)
 })
 
 blogRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
@@ -83,7 +120,8 @@ blogRouter.put('/:id', middleware.userExtractor, async (request, response) => {
 		title: body.title || null,
 		author: body.author || null,
 		url: body.url || null,
-		likes: body.likes || null
+		likes: body.likes || null,
+		comments: body.comments || null
 	}
 	
 	const updatedBlog = await Blog.findByIdAndUpdate(

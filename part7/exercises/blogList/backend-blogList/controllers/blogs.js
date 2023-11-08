@@ -52,6 +52,12 @@ blogRouter.post('/:id/comments', middleware.userExtractor, async (request, respo
 	
 	const { newComment } = request.body
 
+	if(newComment.length < 2 ){
+		return response.status(400).json({
+			error: 'Comment is too short'
+		})
+	}
+
 	const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
 	if (!decodedToken.id) { 

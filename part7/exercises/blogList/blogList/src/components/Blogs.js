@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 import { Link, Routes, Route, useMatch, useNavigate } from 'react-router-dom'
 
 import { setNotification } from "../reducers/notificationReducer"
-import { initializeBlogs, deleteBlog, likeBlog } from "../reducers/blogReducer"
+import { initializeBlogs, deleteBlog, likeBlog, commentBlog } from "../reducers/blogReducer"
 
 import NewBlog from "../components/NewBlog"
 import Togglable from "../components/Togglable"
@@ -42,6 +42,7 @@ const Comments = ({ comments }) => {
 					:	<p>Nothing here...</p>
 				}
 			</ul>
+
 		</div>
 	)
 }
@@ -71,6 +72,8 @@ const UndetailedBlog = ({ blogs }) => {
 }
 
 const DetailedBlog = ({ blog }) => {
+
+	const [comment, setComment] = useState('')
 
 	const dispatch = useDispatch()
 	const navigate = useNavigate()
@@ -121,32 +124,90 @@ const DetailedBlog = ({ blog }) => {
 		}
 	}
 
+	const handleComment = async evt => {
+		evt.preventDefault()
+
+		try{
+
+			const commentedBlog = await blogService.comment(blog.id, comment)
+
+			dispatch(commentBlog(commentedBlog))
+			console.log(commentedBlog);
+			
+			setComment("")
+			dispatch(
+				setNotification(
+					{
+						message: `New comment added`,
+						type: "message"
+					},
+					3
+				)
+			)
+		} catch (excep) {
+
+			console.log(excep);
+
+			dispatch(
+				setNotification(
+					{
+						message: excep.response.data.error,
+						type: "error"
+					},
+					5
+				)
+			)
+		}
+	}
+
 	if(!blog) return null
 
 	return (
 		<div>
-			<h2>Title: {blog.title} - by {blog.author}</h2>
-
-			<p>URL: {blog.url}</p>
-
-			<p>
-				Likes: {blog.likes}
-				<button
-					className="likeButton"
-					onClick={() => addLikes(blog)}>
-					Like
-				</button>
-			</p>
-
-			<p>From user: {blog.user.username}</p>
-
 			<div>
-				<button id="deleteButton" onClick={() => eraseBlog(blog)}>
-					DELETE
-				</button>
+				<h2>Title: {blog.title} - by {blog.author}</h2>
+
+				<p>URL: {blog.url}</p>
+
+				<p>
+					Likes: {blog.likes}
+					<button
+						className="likeButton"
+						onClick={() => addLikes(blog)}>
+						Like
+					</button>
+				</p>
+
+				<p>From user: {blog.user.username}</p>
+
+				<div>
+					<button id="deleteButton" onClick={() => eraseBlog(blog)}>
+						DELETE
+					</button>
+				</div>
 			</div>
 
 			<Comments comments={blog.comments}/>
+
+			<div>
+				<form onSubmit={handleComment}>
+					<div>
+						New comment:
+						<input
+							id="comment"
+							type="text"
+							value={comment}
+							name="comment"
+							placeholder="comment"
+							onChange={({ target }) => setComment(target.value)}
+						/>
+					</div>
+
+					<button type="submit" id="commentButton">
+						Comment
+					</button>
+				</form>
+			</div>
 		</div>
 	)
 }

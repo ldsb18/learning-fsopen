@@ -39,9 +39,11 @@ const UserInformation = ({ user }) => {
 			<h2> {user.username} </h2>
 
 			<ul>
-				{user.blogs.map( blog => 
-					<li key={blog.id}> { blog.title } </li>
-				)}
+					{user.blogs.map( blog => 
+						<li key={blog.id}>
+							<Link to={`/blogs/${blog.id}`} > { blog.title } </Link>
+						</li>
+					)}
 			</ul>
 		</div>
 	)

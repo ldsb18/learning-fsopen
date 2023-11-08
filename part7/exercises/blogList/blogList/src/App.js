@@ -12,6 +12,7 @@ import Users from "./components/Users"
 import LoginForm from "./components/LoginForm"
 
 import blogService from "./services/blogs"
+import loginService from "./services/login"
 
 import { logUser } from "./reducers/loggedUserReducer"
 
@@ -19,18 +20,23 @@ const style = {
 	padding: 5
 }
 
-
 const App = () => {
 	const loggedUser = useSelector(({ loggedUser }) => loggedUser)
 
 	const dispatch = useDispatch()
-
 	useEffect(() => {
 		const loggedUser_local = window.localStorage.getItem("loggedUser")
 		if (loggedUser_local) {
 			const user = JSON.parse(loggedUser_local)
-			dispatch(logUser(user))
-			blogService.setToken(user.token)
+
+			loginService.checkToken(user.token)
+			.then(() => {
+				dispatch(logUser(user))
+				blogService.setToken(user.token)
+			})
+			.catch(err => {
+				window.localStorage.removeItem("loggedUser")
+			})
 		}
 	}, [])
 

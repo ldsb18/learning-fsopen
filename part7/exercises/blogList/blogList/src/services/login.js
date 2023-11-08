@@ -6,5 +6,15 @@ const login = async user => {
 	return response.data
 }
 
+const checkToken = async (token) => {
+
+	const config = {
+		headers: { Authorization: `bearer ${token}` },
+	}
+
+	const response = await axios.get(`${baseUrl}/verifyToken`, config)
+	return response.data
+}
+
 // eslint-disable-next-line
-export default { login }
+export default { login, checkToken }

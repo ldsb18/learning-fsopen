@@ -1,7 +1,9 @@
 import { useEffect,  } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Route, Routes, Link, useMatch } from 'react-router-dom'
+import { Route, Routes, Link, useMatch, useNavigate } from 'react-router-dom'
+
+import { TableBody, TableContainer, TableRow, Paper, Table, TableCell, TableHead } from "@mui/material"
 
 import { storeUsers } from '../reducers/usersReducer'
 
@@ -9,24 +11,38 @@ import usersService from '../services/users'
 
 const InformationTable = ({ users }) => {
 
-	return(
-		<table>
-			<thead>
-				<tr>
-					<th></th>
-					<th>Blogs created</th>
-				</tr>
-			</thead>
+	const navigate = useNavigate()
 
-			<tbody>
-				{users.map(user => 
-					<tr key={user.id}>
-						<td> <Link to={`/users/${user.id}`} >{user.username}</Link> </td>
-						<td> {user.blogs.length} </td>
-					</tr>
-				)}
-			</tbody>
-		</table>
+	return(
+		
+		<div>
+			<TableContainer component={Paper} >
+				<Table>
+					<TableHead>
+						<TableRow>
+							<TableCell>
+								USER
+							</TableCell>
+							<TableCell>
+								BLOGS
+							</TableCell>
+						</TableRow>
+					</TableHead>
+					<TableBody>
+						{users.map(user => (
+							<TableRow key={user.id} onClick={() => navigate(`/users/${user.id}`)}>
+								<TableCell>
+									{user.username}
+								</TableCell>
+								<TableCell>
+									{user.blogs.length}
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</TableContainer>
+		</div>		
 	)
 }
 

@@ -5,6 +5,7 @@ import { setNotification } from "../reducers/notificationReducer"
 import { setBlogs } from "../reducers/blogReducer"
 
 import blogService from "../services/blogs"
+import { Button, TextField } from "@mui/material"
 
 const NewBlog = ({ reference }) => {
 	const [title, setTitle] = useState("")
@@ -64,8 +65,8 @@ const NewBlog = ({ reference }) => {
 			<h2>Create a new Blog</h2>
 			<form onSubmit={postBlog}>
 				<div>
-					Title:
-					<input
+					<TextField
+						label="title"
 						id="title"
 						type="text"
 						value={title}
@@ -76,8 +77,8 @@ const NewBlog = ({ reference }) => {
 				</div>
 
 				<div>
-					Author:
-					<input
+					<TextField
+						label="author"
 						id="author"
 						type="text"
 						value={author}
@@ -88,8 +89,8 @@ const NewBlog = ({ reference }) => {
 				</div>
 
 				<div>
-					URL:
-					<input
+					<TextField
+						label="url"
 						id="url"
 						type="text"
 						value={url}
@@ -99,9 +100,9 @@ const NewBlog = ({ reference }) => {
 					/>
 				</div>
 
-				<button type="submit" className="submitButton">
+				<Button variant="contained" type="submit" className="submitButton">
 					Create
-				</button>
+				</Button>
 			</form>
 		</div>
 	)

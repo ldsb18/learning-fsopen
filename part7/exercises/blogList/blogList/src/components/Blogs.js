@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
-import { Link, Routes, Route, useMatch, useNavigate } from 'react-router-dom'
+import { Routes, Route, useMatch, useNavigate } from 'react-router-dom'
+
+import { TableBody, TableContainer, TableRow, Paper, Table, TableCell, TextField, Button } from "@mui/material"
 
 import { setNotification } from "../reducers/notificationReducer"
 import { initializeBlogs, deleteBlog, likeBlog, commentBlog } from "../reducers/blogReducer"
@@ -10,23 +12,6 @@ import NewBlog from "../components/NewBlog"
 import Togglable from "../components/Togglable"
 
 import blogService from "../services/blogs"
-
-const Blog = ({ blog }) => {
-	const blogStyle = {
-		padding: 5,
-		border: "solid",
-		borderWidth: 1,
-		marginBottom: 10,
-	}
-
-	return (
-		<div style={blogStyle} className="blogs">
-			<div>
-				<Link to={`/blogs/${blog.id}`} >{blog.title} - {blog.author}</Link>
-			</div>
-		</div>
-	)
-}
 
 const Comments = ({ comments }) => {
 
@@ -48,19 +33,29 @@ const Comments = ({ comments }) => {
 }
 
 const UndetailedBlog = ({ blogs }) => {
-
 	const newBlogRef = useRef()
+	const navigate = useNavigate()
 
 	return (
 		<div>
 			<h2>Blogs</h2>
 
-			{blogs.map(blog => (
-				<Blog
-					key={blog.id}
-					blog={blog}
-				/>
-			))}
+			<TableContainer component={Paper} >
+				<Table>
+					<TableBody>
+						{blogs.map(blog => (
+							<TableRow key={blog.id} onClick={() => navigate(`/blogs/${blog.id}`)}>
+								<TableCell>
+									{blog.title}
+								</TableCell>
+								<TableCell>
+									Author: {blog.author}
+								</TableCell>
+							</TableRow>
+						))}
+					</TableBody>
+				</Table>
+			</TableContainer>
 
 			<Togglable buttonLabel="New Blog" ref={newBlogRef}>
 				<NewBlog reference={newBlogRef} />
@@ -169,22 +164,21 @@ const DetailedBlog = ({ blog }) => {
 
 				<p>URL: {blog.url}</p>
 
-				<p>
-					Likes: {blog.likes}
-					<button
-						className="likeButton"
-						onClick={() => addLikes(blog)}>
-						Like
-					</button>
-				</p>
-
 				<p>From user: {blog.user.username}</p>
 
-				<div>
-					<button id="deleteButton" onClick={() => eraseBlog(blog)}>
-						DELETE
-					</button>
-				</div>
+				<p>
+					Likes: {blog.likes}
+				</p>
+
+				<Button variant="contained"
+					className="likeButton"
+					onClick={() => addLikes(blog)}>
+					LIKE BLOG
+				</Button>
+			
+				<Button variant="contained" color="secondary" id="deleteButton" onClick={() => eraseBlog(blog)}>
+					DELETE BLOG
+				</Button>
 			</div>
 
 			<Comments comments={blog.comments}/>
@@ -192,8 +186,8 @@ const DetailedBlog = ({ blog }) => {
 			<div>
 				<form onSubmit={handleComment}>
 					<div>
-						New comment:
-						<input
+						<TextField
+							label="comment"
 							id="comment"
 							type="text"
 							value={comment}
@@ -203,9 +197,9 @@ const DetailedBlog = ({ blog }) => {
 						/>
 					</div>
 
-					<button type="submit" id="commentButton">
+					<Button variant="contained" type="submit" id="commentButton">
 						Comment
-					</button>
+					</Button>
 				</form>
 			</div>
 		</div>

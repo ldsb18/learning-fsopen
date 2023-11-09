@@ -6,6 +6,8 @@ import {
 	Routes, Route, Link
 } from 'react-router-dom'
 
+import { AppBar, Button, Container, Toolbar } from "@mui/material"
+
 import Notification from "./components/Notification"
 import Blogs from "./components/Blogs"
 import Users from "./components/Users"
@@ -47,32 +49,48 @@ const App = () => {
 	}
 
 	return (
-		<div className="appContainer">
+		<Container>
 			<Notification />
 
 			{loggedUser === null ? (
 				<LoginForm />
 			) : (
-				<Router>
-
-					<div>
-						<Link style={style} to="/" >BLOGS</Link>
-						<Link style={style} to="/users" >USERS</Link>
-						<span>{loggedUser.username} logged-in <button onClick={logout}>logout</button></span>
-					</div>
-
-					<div>
-						<h1>Blogs application</h1>
-
-						<Routes>
-							<Route path="*" element={<Blogs />} />
-							<Route path="/users/*" element={<Users />} />
-						</Routes>
-
-					</div>
-				</Router>
+				<div>
+					<Router>
+						<AppBar position="sticky" >
+							<Toolbar style={{display: "flex", justifyContent: "space-between"}}>
+								<div>
+									<Button color="inherit" component={Link} to="/" >
+										BLOGS
+									</Button>
+									<Button color="inherit" component={Link} to="/users" >
+										USERS
+									</Button>
+								</div>
+								<div>
+									<span>{loggedUser.username} logged-in</span>
+									<Button color="inherit" onClick={logout}>logout</Button>
+								</div>
+							</Toolbar>
+						</AppBar>
+	
+						<div>
+							<h1>Blogs application</h1>
+	
+							<Routes>
+								<Route path="*" element={<Blogs />} />
+								<Route path="/users/*" element={<Users />} />
+							</Routes>
+	
+						</div>
+					</Router>
+	
+					<br />
+					<br />
+					<footer style={{textAlign: "center"}} ><em>All rights reserved @lauta_dsb</em></footer>
+				</div>
 			)}
-		</div>
+		</Container>
 	)
 }
 

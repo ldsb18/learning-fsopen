@@ -1,0 +1,18 @@
+{
+  "name": "phonebook",
+  "version": "0.0.1",
+  "description": "This is app is for practice",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "apollo"
+  ],
+  "author": "Vaskyat",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.9.5",
+    "graphql": "^16.8.1"
+  }
+}

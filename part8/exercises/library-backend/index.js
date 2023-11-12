@@ -115,6 +115,15 @@ const typeDefs = `
 		id: ID!
 	}
 
+	type Mutation {
+		addBook(
+			title: String!
+			published: Int!
+			author: String!
+			genres: [String!]!
+		): Book
+	}
+
 	type Query {
 		bookCount: Int!
 		authorCount: Int!
@@ -143,14 +152,26 @@ const resolvers = {
 
 			authorFunc = (author) => {
 				return {
-					name: author.name,
+					...author,
 					booksCount: books.filter(b => b.author === author.name).length
 				}
 			}
 
-			const all_authors = authors.map(authorFunc)
+			return authors.map(authorFunc)
+		}
+	},
+	Mutation: {
+		addBook: (root, args) => {
+			const newBook = { ...args, id: uuid() }
+			const existingAuthor = authors.find(a => a.name === args.author)
 
-			return all_authors
+			if(!existingAuthor) {
+				newAuthor = { name: args.author, id: uuid() }
+				authors = authors.concat(newAuthor)
+			}
+
+			books = books.concat(newBook)
+			return newBook
 		}
 	},
 	Author: {

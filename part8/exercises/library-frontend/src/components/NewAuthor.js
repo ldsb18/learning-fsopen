@@ -7,15 +7,15 @@ const NewAuthor = () => {
 	const [born, setBorn] = useState("")
 
 	const response = useQuery(ALL_AUTHORS_NAME)
-    const [ editAuthor ] = useMutation(EDIT_AUTHOR)
+	const [editAuthor] = useMutation(EDIT_AUTHOR)
 
 	const editBirth = async event => {
 		event.preventDefault()
 		const [value] = new FormData(event.target)
 
-        editAuthor({
-            variables: {name: value[1], setBornTo: Number(born)}
-        })
+		editAuthor({
+			variables: { name: value[1], setBornTo: Number(born) },
+		})
 
 		setBorn("")
 	}
@@ -24,16 +24,18 @@ const NewAuthor = () => {
 
 	return (
 		<div>
-
-            <h2>Set birthyear</h2>
+			<h2>Set birthyear</h2>
 
 			<form onSubmit={editBirth}>
 				<label>
 					Pick some dude:
-					<select name="author" >
-						{authors.map(a => 
-							<option value={a.name} key={a.name}> { a.name } </option>
-						)}
+					<select name="author">
+						{authors.map(a => (
+							<option value={a.name} key={a.name}>
+								{" "}
+								{a.name}{" "}
+							</option>
+						))}
 					</select>
 				</label>
 				<div>

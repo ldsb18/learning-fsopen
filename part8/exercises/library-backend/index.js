@@ -152,17 +152,7 @@ const resolvers = {
 
 			return books.filter(authorFilter).filter(genreFilter)
 		},
-		allAuthors: () => {
-
-			authorFunc = (author) => {
-				return {
-					...author,
-					booksCount: books.filter(b => b.author === author.name).length
-				}
-			}
-
-			return authors.map(authorFunc)
-		}
+		allAuthors: () => authors,
 	},
 	Mutation: {
 		addBook: (root, args) => {
@@ -192,6 +182,7 @@ const resolvers = {
 	Author: {
 		name: (root) => root.name,
 		born: (root) => root.born,
+		booksCount: (root) => books.filter(b => b.author === root.name).length,
 		id: (root) => root.id,
 	},
 	Book: {

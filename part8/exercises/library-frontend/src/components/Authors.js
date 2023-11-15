@@ -1,6 +1,7 @@
 import { useQuery } from "@apollo/client"
 
 import { ALL_AUTHORS } from "../queries"
+import NewAuthor from "./NewAuthor"
 
 const Authors = props => {
 	const response = useQuery(ALL_AUTHORS)
@@ -18,6 +19,7 @@ const Authors = props => {
 	return (
 		<div>
 			<h2>authors</h2>
+
 			<table>
 				<tbody>
 					<tr>
@@ -34,6 +36,8 @@ const Authors = props => {
 					))}
 				</tbody>
 			</table>
+
+			<NewAuthor />
 		</div>
 	)
 }

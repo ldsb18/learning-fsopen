@@ -1,24 +1,26 @@
-import { useMutation } from "@apollo/client"
+import { useMutation, useQuery } from "@apollo/client"
 import { useState } from "react"
 
-import { EDIT_AUTHOR } from "../queries"
+import { ALL_AUTHORS_NAME, EDIT_AUTHOR } from "../queries"
 
 const NewAuthor = () => {
-	const [name, setName] = useState("")
 	const [born, setBorn] = useState("")
 
+	const response = useQuery(ALL_AUTHORS_NAME)
     const [ editAuthor ] = useMutation(EDIT_AUTHOR)
 
 	const editBirth = async event => {
 		event.preventDefault()
+		const [value] = new FormData(event.target)
 
         editAuthor({
-            variables: {name, setBornTo: Number(born)}
+            variables: {name: value[1], setBornTo: Number(born)}
         })
 
-		setName("")
 		setBorn("")
 	}
+
+	const authors = response.data.allAuthors
 
 	return (
 		<div>
@@ -26,14 +28,14 @@ const NewAuthor = () => {
             <h2>Set birthyear</h2>
 
 			<form onSubmit={editBirth}>
-				<div>
-					name
-					<input
-						value={name}
-						onChange={({ target }) => setName(target.value)}
-					/>
-				</div>
-
+				<label>
+					Pick some dude:
+					<select name="author" >
+						{authors.map(a => 
+							<option value={a.name} key={a.name}> { a.name } </option>
+						)}
+					</select>
+				</label>
 				<div>
 					born
 					<input

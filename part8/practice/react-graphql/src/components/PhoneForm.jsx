@@ -13,7 +13,7 @@ const PhoneForm = ({ setError }) => {
 		if(result.data && result.data.editNumber === null) {
 			setError('person not found')
 		}
-	}, [result.data])
+	}, [result.data, setError])
 
 	const submit = (evt) => {
 		evt.preventDefault()

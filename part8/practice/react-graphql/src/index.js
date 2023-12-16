@@ -10,7 +10,7 @@ const authLink = setContext( (_, { headers }) => {
 	const token = localStorage.getItem('phonenumbers-user-token')
 	return {
 		headers: {
-			... headers,
+			...headers,
 			authorization: token ? `bearer ${token}` : null,
 		}
 	}

@@ -3,7 +3,7 @@ import { useState } from "react"
 
 import { ADD_BOOK, ALL_AUTHORS, ALL_BOOKS } from "../queries"
 
-const NewBook = props => {
+const NewBook = ({show, setPage}) => {
 	const [title, setTitle] = useState("")
 	const [author, setAuthor] = useState("")
 	const [published, setPublished] = useState("")
@@ -11,13 +11,13 @@ const NewBook = props => {
 	const [genres, setGenres] = useState([])
 
 	const [createBook] = useMutation(ADD_BOOK, {
-		refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
+		refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS } ],
 		onError: error => {
 			console.log(error)
 		},
 	})
 
-	if (!props.show) {
+	if (!show) {
 		return null
 	}
 
@@ -33,6 +33,7 @@ const NewBook = props => {
 		setAuthor("")
 		setGenres([])
 		setGenre("")
+		setPage('books')
 	}
 
 	const addGenre = () => {
